@@ -1,0 +1,6 @@
+rootProject.name = 'auto-trader'
+include 'global-util'
+include 'trader-core:domain'
+include 'trader-core:infra'
+include 'trader-api'
+include 'trader-common'
