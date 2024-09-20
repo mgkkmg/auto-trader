@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    group:
+      local: common
+      prod: common
+
+upbit:
+  access-key: ENC(lHKXPFsFLNHh4QtHXtYeRfnaG6EQyW5U0KJc/iiULcyespLw8rZ2JZUVV7TtWwec7TYOGDHuWXw=)
+  secret-key: ENC(sWK04sCyy25gp91COo8EKpxwbVOlIGxl5b76M7+FTcklJUQgf2uXn+JDO38APHmlj8eYU4vhFSU=)
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test

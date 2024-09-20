@@ -13,6 +13,7 @@ public enum ErrorCode implements ResponseBaseCode {
 	INTERNAL_SERVER_ERROR("C-004", "Server Error"),
 	INVALID_TYPE_VALUE("C-005", "Invalid Type Value"),
 	HANDLE_ACCESS_DENIED("C-006", "Access is Denied"),
+	CREATE_JWT_TOKEN_ERROR("C-007", "Jwt Token error"),
 
 	// Business
 	DUPLICATE("B-001", "Duplicate Value"),

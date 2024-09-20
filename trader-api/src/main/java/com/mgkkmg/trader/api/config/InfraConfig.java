@@ -2,8 +2,8 @@ package com.mgkkmg.trader.api.config;
 
 import org.springframework.context.annotation.Configuration;
 
-import com.mgkkmg.trader.core.infra.AutoTraderConfigGroup;
-import com.mgkkmg.trader.core.infra.EnableAutoTraderConfig;
+import com.mgkkmg.trader.core.infra.common.importer.AutoTraderConfigGroup;
+import com.mgkkmg.trader.core.infra.common.importer.EnableAutoTraderConfig;
 
 @Configuration(proxyBeanMethods = false)
 @EnableAutoTraderConfig({
