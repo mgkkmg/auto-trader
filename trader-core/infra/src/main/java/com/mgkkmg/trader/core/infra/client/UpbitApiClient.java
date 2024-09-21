@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.common.client;
+package com.mgkkmg.trader.core.infra.client;
 
 import java.util.List;
 
@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 
-import com.mgkkmg.trader.common.response.AccountsResponse;
+import com.mgkkmg.trader.common.response.AccountResponse;
 import com.mgkkmg.trader.common.response.CandleMinuteResponse;
 
 public interface UpbitApiClient {
 	@GetExchange("https://api.upbit.com/v1/accounts")
-	List<AccountsResponse> getAccounts(
+	List<AccountResponse> getAccounts(
 		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String authenticationToken
 	);
@@ -27,9 +27,15 @@ public interface UpbitApiClient {
 	// );
 
 	@GetExchange("https://api.upbit.com/v1/candles/minutes/{unit}")
-	List<CandleMinuteResponse> getCandlesMinute(
+	List<CandleMinuteResponse> getCandlesMinutes(
 		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
 		@PathVariable(value="unit") Integer unit,
+		@RequestParam(value="params") MultiValueMap<String, Object> params
+	);
+
+	@GetExchange("https://api.upbit.com/v1/candles/days")
+	List<CandleMinuteResponse> getCandlesDays(
+		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
 		@RequestParam(value="params") MultiValueMap<String, Object> params
 	);
 }

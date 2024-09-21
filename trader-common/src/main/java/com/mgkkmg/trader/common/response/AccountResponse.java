@@ -2,7 +2,7 @@ package com.mgkkmg.trader.common.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record AccountsResponse(
+public record AccountResponse(
 	String currency,
 	String balance,
 	String locked,

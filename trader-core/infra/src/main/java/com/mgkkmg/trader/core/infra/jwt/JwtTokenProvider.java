@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.core.infra.common.jwt;
+package com.mgkkmg.trader.core.infra.jwt;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;

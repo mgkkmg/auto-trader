@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.common.httpinterface;
+package com.mgkkmg.trader.core.infra.httpinterface;
 
 import org.springframework.web.client.RestClient;
 

@@ -1,11 +1,11 @@
-package com.mgkkmg.trader.common.httpinterface;
+package com.mgkkmg.trader.core.infra.httpinterface;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.RestClient;
 
-import com.mgkkmg.trader.common.client.UpbitApiClient;
+import com.mgkkmg.trader.core.infra.client.UpbitApiClient;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.core.infra.common.importer;
+package com.mgkkmg.trader.core.infra.importer;
 
 import java.util.Arrays;
 import java.util.Map;

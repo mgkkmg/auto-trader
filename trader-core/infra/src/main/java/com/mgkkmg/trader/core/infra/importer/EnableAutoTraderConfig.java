@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.core.infra.common.importer;
+package com.mgkkmg.trader.core.infra.importer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

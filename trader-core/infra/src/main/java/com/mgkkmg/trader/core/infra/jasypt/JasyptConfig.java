@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.core.infra.config;
+package com.mgkkmg.trader.core.infra.jasypt;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
@@ -6,7 +6,7 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
-import com.mgkkmg.trader.core.infra.common.importer.AutoTraderConfig;
+import com.mgkkmg.trader.core.infra.importer.AutoTraderConfig;
 
 public class JasyptConfig implements AutoTraderConfig {
 

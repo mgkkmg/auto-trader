@@ -1,7 +1,7 @@
-package com.mgkkmg.trader.core.infra.common.importer;
+package com.mgkkmg.trader.core.infra.importer;
 
-import com.mgkkmg.trader.core.infra.config.JasyptConfig;
-import com.mgkkmg.trader.core.infra.config.JpaConfig;
+import com.mgkkmg.trader.core.infra.jasypt.JasyptConfig;
+import com.mgkkmg.trader.core.infra.Jpa.JpaConfig;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

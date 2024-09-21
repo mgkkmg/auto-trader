@@ -1,10 +1,10 @@
-package com.mgkkmg.trader.core.infra.config;
+package com.mgkkmg.trader.core.infra.Jpa;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.mgkkmg.trader.core.infra.common.importer.AutoTraderConfig;
+import com.mgkkmg.trader.core.infra.importer.AutoTraderConfig;
 
 @EnableTransactionManagement
 @EntityScan("com.mgkkmg.trader")
