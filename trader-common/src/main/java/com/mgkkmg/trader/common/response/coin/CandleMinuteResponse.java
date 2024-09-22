@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.common.response;
+package com.mgkkmg.trader.common.response.coin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,18 +9,18 @@ public record CandleMinuteResponse(
 	@JsonProperty("candle_date_time_kst")
 	String candleDateTimeKst,
 	@JsonProperty("opening_price")
-	double openingPrice,
+	Double openingPrice,
 	@JsonProperty("high_price")
-	double highPrice,
+	Double highPrice,
 	@JsonProperty("low_price")
-	double lowPrice,
+	Double lowPrice,
 	@JsonProperty("trade_price")
-	double tradePrice,
-	long timestamp,
+	Double tradePrice,
+	Long timestamp,
 	@JsonProperty("candle_acc_trade_price")
-	double candleAccTradePrice,
+	Double candleAccTradePrice,
 	@JsonProperty("candle_acc_trade_volume")
-	double candleAccTradeVolume,
-	int unit
+	Double candleAccTradeVolume,
+	Integer unit
 ) {
 }

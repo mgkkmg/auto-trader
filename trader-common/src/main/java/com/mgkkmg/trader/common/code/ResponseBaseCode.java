@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.common.response.code;
+package com.mgkkmg.trader.common.code;
 
 public interface ResponseBaseCode {
 

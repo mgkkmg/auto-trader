@@ -3,7 +3,7 @@ package com.mgkkmg.trader.common.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mgkkmg.trader.common.response.code.ErrorCode;
+import com.mgkkmg.trader.common.code.ErrorCode;
 
 import lombok.AccessLevel;
 import lombok.Getter;

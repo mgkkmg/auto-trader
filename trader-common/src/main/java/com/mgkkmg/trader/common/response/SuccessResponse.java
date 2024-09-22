@@ -2,7 +2,7 @@ package com.mgkkmg.trader.common.response;
 
 import org.springframework.http.HttpStatus;
 
-import com.mgkkmg.trader.common.response.code.SuccessCode;
+import com.mgkkmg.trader.common.code.SuccessCode;
 
 import lombok.AccessLevel;
 import lombok.Getter;

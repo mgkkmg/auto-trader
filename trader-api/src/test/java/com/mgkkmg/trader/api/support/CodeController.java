@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mgkkmg.trader.common.response.code.ErrorCode;
-import com.mgkkmg.trader.common.response.code.SuccessCode;
+import com.mgkkmg.trader.common.code.ErrorCode;
+import com.mgkkmg.trader.common.code.SuccessCode;
 
 @RestController
 public class CodeController {

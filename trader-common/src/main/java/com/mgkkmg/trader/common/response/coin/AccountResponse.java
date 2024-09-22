@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.common.response;
+package com.mgkkmg.trader.common.response.coin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

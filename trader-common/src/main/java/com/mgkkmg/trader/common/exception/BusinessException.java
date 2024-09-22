@@ -1,6 +1,6 @@
 package com.mgkkmg.trader.common.exception;
 
-import com.mgkkmg.trader.common.response.code.ErrorCode;
+import com.mgkkmg.trader.common.code.ErrorCode;
 
 import lombok.Getter;
 

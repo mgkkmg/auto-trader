@@ -22,9 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.mgkkmg.trader.api.support.CodeResponseFieldsSnippet;
-import com.mgkkmg.trader.common.response.code.ErrorCode;
-import com.mgkkmg.trader.common.response.code.ResponseBaseCode;
-import com.mgkkmg.trader.common.response.code.SuccessCode;
+import com.mgkkmg.trader.common.code.ErrorCode;
+import com.mgkkmg.trader.common.code.ResponseBaseCode;
+import com.mgkkmg.trader.common.code.SuccessCode;
 
 @SpringBootTest
 @AutoConfigureMockMvc

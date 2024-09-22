@@ -7,22 +7,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.mgkkmg.trader.common.response.CandleMinuteResponse;
+import com.mgkkmg.trader.api.apis.coin.dto.OrderbookDto;
+import com.mgkkmg.trader.common.response.coin.OrderbookResponse;
 import com.mgkkmg.trader.core.infra.client.UpbitApiClient;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class CandleDayService {
+public class OrderbookService {
 
 	private final UpbitApiClient upbitApiClient;
 
-	public List<CandleMinuteResponse> getCandlesDays() {
+	public List<OrderbookDto> getOrderbook() {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-		params.add("market", "KRW-BTC");
-		params.add("count", 30);
+		params.add("markets", "KRW-BTC");
 
-		return upbitApiClient.getCandlesDays(MediaType.APPLICATION_JSON_VALUE, params);
+		List<OrderbookResponse> orderBookResponses = upbitApiClient.getOrderbook(MediaType.APPLICATION_JSON_VALUE, params);
+
+		return orderBookResponses.stream()
+			.map(OrderbookDto::from)
+			.toList();
 	}
 }

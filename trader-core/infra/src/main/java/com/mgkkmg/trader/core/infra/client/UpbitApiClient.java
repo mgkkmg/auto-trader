@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 
-import com.mgkkmg.trader.common.response.AccountResponse;
-import com.mgkkmg.trader.common.response.CandleMinuteResponse;
+import com.mgkkmg.trader.common.response.coin.AccountResponse;
+import com.mgkkmg.trader.common.response.coin.CandleDayResponse;
+import com.mgkkmg.trader.common.response.coin.CandleMinuteResponse;
+import com.mgkkmg.trader.common.response.coin.OrderbookResponse;
 
 public interface UpbitApiClient {
 	@GetExchange("https://api.upbit.com/v1/accounts")
@@ -19,12 +21,11 @@ public interface UpbitApiClient {
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String authenticationToken
 	);
 
-	// @PostExchange("https://api.upbit.com/v1/orders")
-	// List<OrdersResponse> orders(
-	// 	@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
-	// 	@RequestHeader(HttpHeaders.AUTHORIZATION) String authenticationToken,
-	// 	@RequestBody OrdersRequest ordersRequest
-	// );
+	@GetExchange("https://api.upbit.com/v1/orderbook")
+	List<OrderbookResponse> getOrderbook(
+		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
+		@RequestParam(value="params") MultiValueMap<String, Object> params
+	);
 
 	@GetExchange("https://api.upbit.com/v1/candles/minutes/{unit}")
 	List<CandleMinuteResponse> getCandlesMinutes(
@@ -34,8 +35,15 @@ public interface UpbitApiClient {
 	);
 
 	@GetExchange("https://api.upbit.com/v1/candles/days")
-	List<CandleMinuteResponse> getCandlesDays(
+	List<CandleDayResponse> getCandlesDays(
 		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
 		@RequestParam(value="params") MultiValueMap<String, Object> params
 	);
+
+	// @PostExchange("https://api.upbit.com/v1/orders")
+	// List<OrdersResponse> orders(
+	// 	@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
+	// 	@RequestHeader(HttpHeaders.AUTHORIZATION) String authenticationToken,
+	// 	@RequestBody OrdersRequest ordersRequest
+	// );
 }

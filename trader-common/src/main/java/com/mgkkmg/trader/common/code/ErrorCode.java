@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.common.response.code;
+package com.mgkkmg.trader.common.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +14,9 @@ public enum ErrorCode implements ResponseBaseCode {
 	INVALID_TYPE_VALUE("C-005", "Invalid Type Value"),
 	HANDLE_ACCESS_DENIED("C-006", "Access is Denied"),
 	CREATE_JWT_TOKEN_ERROR("C-007", "Jwt Token error"),
+
+	// Util
+	JSON_PROCESS_ERROR("U-001", "Json processing exception"),
 
 	// Business
 	DUPLICATE("B-001", "Duplicate Value"),

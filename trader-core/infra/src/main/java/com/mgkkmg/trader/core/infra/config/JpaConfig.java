@@ -1,4 +1,4 @@
-package com.mgkkmg.trader.core.infra.Jpa;
+package com.mgkkmg.trader.core.infra.config;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

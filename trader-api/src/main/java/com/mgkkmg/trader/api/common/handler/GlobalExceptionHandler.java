@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.mgkkmg.trader.common.exception.BusinessException;
 import com.mgkkmg.trader.common.exception.DuplicateException;
 import com.mgkkmg.trader.common.response.ErrorResponse;
-import com.mgkkmg.trader.common.response.code.ErrorCode;
+import com.mgkkmg.trader.common.code.ErrorCode;
 
 import lombok.extern.slf4j.Slf4j;
 

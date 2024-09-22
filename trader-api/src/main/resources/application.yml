@@ -3,6 +3,13 @@ spring:
     group:
       local: common, domain, infra
       prod: common, domain, infra
+  ai:
+    openai:
+      api-key: ENC(fUSpAiCEofKjty3tfXpKCLEhHIKPhdfeLBDNlv0SDAtfbq5/fMpTAhFDSe3eJp5VA5NWekM0TqTUVyj8SDm09kUV3v8PIk2b3q2Rwf6ad4CZpka1ZVMFah+iTE0j04rS0u4Z7B7CXiesjg0y16kIVYbGm1/rYsoACFydujj+Z/DheJqCAau9VAjCHGx4gK3Fj5oHK2vJ9I20vsRrqKwXewa4ZJn9poqEvQiiZSAbARQ=)
+      chat:
+        options:
+          model: gpt-4o
+          temperature: 0.7
 
 ---
 spring:
