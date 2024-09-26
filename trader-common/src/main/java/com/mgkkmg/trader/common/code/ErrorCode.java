@@ -17,14 +17,15 @@ public enum ErrorCode implements ResponseBaseCode {
 
 	// Util
 	JSON_PROCESS_ERROR("U-001", "Json processing exception"),
+	JSON_NOT_FOUND_SCHEMA("U-002", "JSON Schema 파일을 찾을 수 없습니다."),
 
 	// Business
 	DUPLICATE("B-001", "Duplicate Value"),
 	NOT_FOUND("B-002", "Entity Not Found"),
 
-	// Member
+	// Member,
 	EMAIL_DUPLICATE("M-001", "Duplicate Email Address"),
-	NICKNAME_DUPLICATE("M-002", "Duplicate Nickname"),
+	NICKNAME_DUPLICATE("M-002", "Duplicate Nickname")
 	;
 
 	private final String code;

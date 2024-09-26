@@ -2,9 +2,11 @@ package com.mgkkmg.trader.api.apis.coin.usecase;
 
 import java.util.List;
 
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.ta4j.core.BarSeries;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.mgkkmg.trader.api.apis.ai.dto.AiCoinResultDto;
 import com.mgkkmg.trader.api.apis.ai.service.OpenAiService;
 import com.mgkkmg.trader.api.apis.coin.dto.AccountDto;
 import com.mgkkmg.trader.api.apis.coin.helper.IndicatorCalculator;
@@ -67,17 +69,18 @@ public class ExecuteUseCase {
 			+ "Fear and Greed Index: " + fearGreedIndex;
 
 		System.out.println("message :" + message);
-		// String outputContent = openAiService.callAi(message);
-		// AiCoinResultDto resultDto = JsonUtils.fromJson(outputContent, AiCoinResultDto.class);
-		//
-		// // 결과에 따른 주문
-		// if ("buy".equals(resultDto.decision())) {
-		// 	// 매수
-		// } else if ("sell".equals(resultDto.decision())) {
-		// 	// 매도
-		// }
-		//
-		// log.info("decision: {}", resultDto.decision());
-		// log.info("reason: {}", resultDto.reason());
+		OpenAiChatOptions coinChatOptions = openAiService.getCoinChatOptions();
+		String outputContent = openAiService.callAi(message, coinChatOptions);
+		AiCoinResultDto resultDto = JsonUtils.fromJson(outputContent, AiCoinResultDto.class);
+
+		// 결과에 따른 주문
+		if ("buy".equals(resultDto.decision())) {
+			// 매수
+		} else if ("sell".equals(resultDto.decision())) {
+			// 매도
+		}
+
+		log.info("decision: {}", resultDto.decision());
+		log.info("reason: {}", resultDto.reason());
 	}
 }
