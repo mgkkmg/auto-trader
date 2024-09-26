@@ -45,6 +45,7 @@ public class TaService {
 			double low = candle.get("low").asDouble();
 			double close = candle.get("close").asDouble();
 			double volume = candle.get("volume").asDouble();
+			double value = candle.get("value").asDouble();
 
 			// Define the bar's time period
 			Duration duration = isDaily ? Duration.ofDays(1) : Duration.ofHours(1);
@@ -57,6 +58,7 @@ public class TaService {
 				.lowPrice(DecimalNum.valueOf(low))
 				.closePrice(DecimalNum.valueOf(close))
 				.volume(DecimalNum.valueOf(volume))
+				.amount(DecimalNum.valueOf(value))
 				.build();
 
 			series.addBar(bar);

@@ -5,12 +5,12 @@ import java.util.List;
 import org.ta4j.core.BarSeries;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mgkkmg.trader.api.apis.ai.dto.AiCoinResultDto;
 import com.mgkkmg.trader.api.apis.ai.service.OpenAiService;
 import com.mgkkmg.trader.api.apis.coin.dto.AccountDto;
 import com.mgkkmg.trader.api.apis.coin.helper.IndicatorCalculator;
 import com.mgkkmg.trader.api.apis.coin.service.AccountInfoService;
 import com.mgkkmg.trader.api.apis.coin.service.CandleService;
+import com.mgkkmg.trader.api.apis.coin.service.FearGreedIndexService;
 import com.mgkkmg.trader.api.apis.coin.service.OrderbookService;
 import com.mgkkmg.trader.api.apis.coin.service.TaService;
 import com.mgkkmg.trader.common.annotation.UseCase;
@@ -27,8 +27,9 @@ public class ExecuteUseCase {
 	private final AccountInfoService accountInfoService;
 	private final OrderbookService orderbookService;
 	private final CandleService candleService;
-	private final OpenAiService openAiService;
 	private final TaService taService;
+	private final FearGreedIndexService fearGreedIndexService;
+	private final OpenAiService openAiService;
 
 	public void execute() {
 		// 현재 투자 상태 조회
@@ -47,21 +48,25 @@ public class ExecuteUseCase {
 		String hourlyCandle = JsonUtils.toJson(candleService.getCandlesMinutes());
 
 		// 보조 지표 넣기
-		// 1. 데이터 시리즈 로드
 		BarSeries dailySeries = taService.createBarSeries(JsonUtils.fromJson(dailyCandle, new TypeReference<>() {}), true);
 		BarSeries hourlySeries = taService.createBarSeries(JsonUtils.fromJson(hourlyCandle, new TypeReference<>() {}), false);
 
-		// 시리즈 정보 출력
-		log.info("Daily Series Bars: {}", dailySeries.getBarCount());
-		log.info("Hourly Series Bars: {}", hourlySeries.getBarCount());
+		dailyCandle = IndicatorCalculator.getIndicatorsAsJson(dailySeries);
+		hourlyCandle = IndicatorCalculator.getIndicatorsAsJson(hourlySeries);
 
-		System.out.println("getIndicatorsAsJson: " + IndicatorCalculator.getIndicatorsAsJson(dailySeries));
+		// 공포 탐욕 지수
+		String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
+
+		// 최신 뉴스
 
 		// AI 호출 및 결과 받기
-		// String message = "Current investment status: " + balance + "\n"
-		// 	+ "Orderbook: " + orderbook + "\n"
-		// 	+ "Daily OHLCV (30 days): " + dailyCandle + "\n"
-		// 	+ "Hourly OHLCV (24 hours): " + hourlyCandle;
+		String message = "Current investment status: " + balance + "\n"
+			+ "Orderbook: " + orderbook + "\n"
+			+ "Daily OHLCV with indicators (30 days): " + dailyCandle + "\n"
+			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandle + "\n"
+			+ "Fear and Greed Index: " + fearGreedIndex;
+
+		System.out.println("message :" + message);
 		// String outputContent = openAiService.callAi(message);
 		// AiCoinResultDto resultDto = JsonUtils.fromJson(outputContent, AiCoinResultDto.class);
 		//

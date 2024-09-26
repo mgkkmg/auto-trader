@@ -15,6 +15,7 @@ import com.mgkkmg.trader.common.response.coin.CandleMinuteResponse;
 import com.mgkkmg.trader.common.response.coin.OrderbookResponse;
 
 public interface UpbitApiClient {
+
 	@GetExchange("https://api.upbit.com/v1/accounts")
 	List<AccountResponse> getAccounts(
 		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,

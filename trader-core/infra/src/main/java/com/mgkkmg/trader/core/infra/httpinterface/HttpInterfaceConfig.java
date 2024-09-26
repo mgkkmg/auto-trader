@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.RestClient;
 
+import com.mgkkmg.trader.core.infra.client.AlternativeClient;
 import com.mgkkmg.trader.core.infra.client.UpbitApiClient;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,11 @@ public class HttpInterfaceConfig {
 	@Bean
 	public UpbitApiClient upbitApiClient() {
 		return httpInterfaceFactory.create(UpbitApiClient.class, createRestClient());
+	}
+
+	@Bean
+	public AlternativeClient alternativeClient() {
+		return httpInterfaceFactory.create(AlternativeClient.class, createRestClient());
 	}
 
 	private RestClient createRestClient() {
