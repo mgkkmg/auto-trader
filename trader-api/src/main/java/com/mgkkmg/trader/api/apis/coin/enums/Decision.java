@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum DecisionType {
+public enum Decision {
 
 	BUY("buy"),
 	SELL("sell"),
@@ -13,9 +13,4 @@ public enum DecisionType {
 	;
 
 	private final String key;
-
-	public static boolean isTypeByKey() {
-
-		return true;
-	}
 }

@@ -2,8 +2,9 @@
   "type": "object",
   "properties": {
     "decision": {"type": "string", "enum": ["buy", "sell", "hold"]},
+    "percentage": {"type": "integer"},
     "reason": {"type": "string"}
   },
-  "required": ["decision", "reason"],
+  "required": ["decision", "percentage","reason"],
   "additionalProperties": false
 }

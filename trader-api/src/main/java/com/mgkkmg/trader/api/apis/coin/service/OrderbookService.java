@@ -19,9 +19,9 @@ public class OrderbookService {
 
 	private final UpbitApiClient upbitApiClient;
 
-	public List<OrderbookDto> getOrderbook() {
+	public List<OrderbookDto> getOrderbook(String market) {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-		params.add("markets", "KRW-BTC");
+		params.add("markets", market);
 
 		List<OrderbookResponse> orderBookResponses = upbitApiClient.getOrderbook(MediaType.APPLICATION_JSON_VALUE, params);
 

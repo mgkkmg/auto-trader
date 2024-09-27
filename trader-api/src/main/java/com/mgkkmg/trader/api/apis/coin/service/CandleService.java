@@ -23,10 +23,10 @@ public class CandleService {
 
 	private final UpbitApiClient upbitApiClient;
 
-	public List<CandleMinuteDto> getCandlesMinutes() {
+	public List<CandleMinuteDto> getCandlesMinutes(String market) {
 		final int intervalMinute = 60;
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-		params.add("market", "KRW-BTC");
+		params.add("market", market);
 		params.add("count", 24);
 
 		List<CandleMinuteResponse> candleMinuteResponses = upbitApiClient.getCandlesMinutes(MediaType.APPLICATION_JSON_VALUE, intervalMinute, params);
@@ -36,9 +36,9 @@ public class CandleService {
 			.toList();
 	}
 
-	public List<CandleDayDto> getCandlesDays() {
+	public List<CandleDayDto> getCandlesDays(String market) {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-		params.add("market", "KRW-BTC");
+		params.add("market", market);
 		params.add("count", 30);
 
 		List<CandleDayResponse> candleDayResponses = upbitApiClient.getCandlesDays(MediaType.APPLICATION_JSON_VALUE, params);
