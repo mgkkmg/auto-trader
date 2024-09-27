@@ -25,9 +25,21 @@ public class OrderService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UpbitConfig upbitConfig;
 
+	private static final double MINIMUM_ORDER_AMOUNT = 5000.0;
+
 	public OrderResponse executeBuyOrder(String market, double availableBalance, double currentPrice, int investRate) {
 		if (availableBalance > 0) {
 			double buyAmount = calculateBuyAmount(availableBalance, currentPrice, investRate);
+
+			if (buyAmount * currentPrice < MINIMUM_ORDER_AMOUNT) {
+				log.info("Calculated buy amount {} is less than minimum order amount {}. Adjusting to minimum.", buyAmount * currentPrice, MINIMUM_ORDER_AMOUNT);
+				buyAmount = MINIMUM_ORDER_AMOUNT / currentPrice;
+			}
+
+			if (buyAmount * currentPrice > availableBalance) {
+				log.info("Insufficient balance for buy order. Available: {}, Required: {}", availableBalance, buyAmount * currentPrice);
+				return null;
+			}
 
 			Map<String, String> params = new HashMap<>();
 			params.put("market", market);
@@ -43,9 +55,14 @@ public class OrderService {
 		}
 	}
 
-	public OrderResponse executeSellOrder(String market, double coinBalance, int investRate) {
+	public OrderResponse executeSellOrder(String market, double coinBalance, double currentPrice, int investRate) {
 		if (coinBalance > 0) {
 			double sellAmount = calculateSellAmount(coinBalance, investRate);
+
+			if (sellAmount * currentPrice < MINIMUM_ORDER_AMOUNT) {
+				log.info("Calculated sell amount {} is less than minimum order amount {}. Cancelling order.", sellAmount * currentPrice, MINIMUM_ORDER_AMOUNT);
+				return null;
+			}
 
 			Map<String, String> params = new HashMap<>();
 			params.put("market", market);

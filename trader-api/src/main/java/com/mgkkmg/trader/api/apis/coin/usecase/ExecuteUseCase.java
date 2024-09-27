@@ -98,8 +98,9 @@ public class ExecuteUseCase {
 			log.info("Buy order executed: {}", buyOrderResponse);
 		} else if (Decision.SELL.getKey().equals(resultDto.decision())) {
 			// 매도
+			double currentPrice = marketPriceService.getCurrentPrice(MARKET);
 			double btcBalance = getBtcBalance();
-			OrderResponse sellOrderResponse = orderService.executeSellOrder(MARKET, btcBalance, resultDto.percentage());
+			OrderResponse sellOrderResponse = orderService.executeSellOrder(MARKET, btcBalance, currentPrice, resultDto.percentage());
 			log.info("Sell order executed: {}", sellOrderResponse);
 		} else {
 			log.info("No action taken based on AI decision");
