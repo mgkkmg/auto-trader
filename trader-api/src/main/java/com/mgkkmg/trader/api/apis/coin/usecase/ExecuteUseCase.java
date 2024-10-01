@@ -1,5 +1,6 @@
 package com.mgkkmg.trader.api.apis.coin.usecase;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -10,17 +11,18 @@ import com.mgkkmg.globalutil.util.NumberUtils;
 import com.mgkkmg.trader.api.apis.ai.dto.AiCoinResultDto;
 import com.mgkkmg.trader.api.apis.ai.service.OpenAiService;
 import com.mgkkmg.trader.api.apis.coin.dto.AccountDto;
-import com.mgkkmg.trader.api.apis.coin.enums.Decision;
 import com.mgkkmg.trader.api.apis.coin.helper.IndicatorCalculator;
 import com.mgkkmg.trader.api.apis.coin.service.AccountInfoService;
 import com.mgkkmg.trader.api.apis.coin.service.CandleService;
+import com.mgkkmg.trader.api.apis.coin.service.ChartService;
 import com.mgkkmg.trader.api.apis.coin.service.FearGreedIndexService;
 import com.mgkkmg.trader.api.apis.coin.service.MarketPriceService;
 import com.mgkkmg.trader.api.apis.coin.service.OrderService;
 import com.mgkkmg.trader.api.apis.coin.service.OrderbookService;
 import com.mgkkmg.trader.api.apis.coin.service.TaService;
 import com.mgkkmg.trader.common.annotation.UseCase;
-import com.mgkkmg.trader.common.response.coin.OrderResponse;
+import com.mgkkmg.trader.common.code.ErrorCode;
+import com.mgkkmg.trader.common.exception.BusinessException;
 import com.mgkkmg.trader.common.util.JsonUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class ExecuteUseCase {
 	private final CandleService candleService;
 	private final TaService taService;
 	private final FearGreedIndexService fearGreedIndexService;
+	private final ChartService chartService;
 	private final OpenAiService openAiService;
 	private final OrderService orderService;
 	private final MarketPriceService marketPriceService;
@@ -72,6 +75,16 @@ public class ExecuteUseCase {
 
 		// 최신 뉴스
 
+		// 차트 이미지
+		try {
+			String url = "https://upbit.com/full_chart?code=CRIX.UPBIT.KRW-BTC";
+			String waitForElementSelector = "#fullChartiq";
+
+			chartService.captureAndSaveScreenshot(url, waitForElementSelector);
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage(), ErrorCode.CAPTURE_SCREENSHOT_ERROR);
+		}
+
 		// AI 호출 및 결과 받기
 		String message = "Current investment status: " + balance + "\n"
 			+ "Orderbook: " + orderbook + "\n"
@@ -90,21 +103,21 @@ public class ExecuteUseCase {
 		log.info("reason: {}", resultDto.reason());
 
 		// 결과에 따른 주문
-		if (Decision.BUY.getKey().equals(resultDto.decision())) {
-			// 매수
-			double currentPrice = marketPriceService.getCurrentPrice(MARKET);
-			double availableBalance = getAvailableBalance();
-			OrderResponse buyOrderResponse = orderService.executeBuyOrder(MARKET, availableBalance, currentPrice, resultDto.percentage());
-			log.info("Buy order executed: {}", buyOrderResponse);
-		} else if (Decision.SELL.getKey().equals(resultDto.decision())) {
-			// 매도
-			double currentPrice = marketPriceService.getCurrentPrice(MARKET);
-			double btcBalance = getBtcBalance();
-			OrderResponse sellOrderResponse = orderService.executeSellOrder(MARKET, btcBalance, currentPrice, resultDto.percentage());
-			log.info("Sell order executed: {}", sellOrderResponse);
-		} else {
-			log.info("No action taken based on AI decision");
-		}
+		// if (Decision.BUY.getKey().equals(resultDto.decision())) {
+		// 	// 매수
+		// 	double currentPrice = marketPriceService.getCurrentPrice(MARKET);
+		// 	double availableBalance = getAvailableBalance();
+		// 	OrderResponse buyOrderResponse = orderService.executeBuyOrder(MARKET, availableBalance, currentPrice, resultDto.percentage());
+		// 	log.info("Buy order executed: {}", buyOrderResponse);
+		// } else if (Decision.SELL.getKey().equals(resultDto.decision())) {
+		// 	// 매도
+		// 	double currentPrice = marketPriceService.getCurrentPrice(MARKET);
+		// 	double btcBalance = getBtcBalance();
+		// 	OrderResponse sellOrderResponse = orderService.executeSellOrder(MARKET, btcBalance, currentPrice, resultDto.percentage());
+		// 	log.info("Sell order executed: {}", sellOrderResponse);
+		// } else {
+		// 	log.info("No action taken based on AI decision");
+		// }
 	}
 
 	private double getAvailableBalance() {

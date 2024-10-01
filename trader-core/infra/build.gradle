@@ -14,4 +14,5 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.12.5'
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
 }

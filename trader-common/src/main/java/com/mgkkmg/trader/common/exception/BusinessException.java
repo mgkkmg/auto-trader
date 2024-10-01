@@ -14,10 +14,6 @@ public class BusinessException extends RuntimeException {
 		this.errorCode = errorCode;
 	}
 
-	public BusinessException(ErrorCode errorCode) {
-		this.errorCode = errorCode;
-	}
-
 	@Override
 	public synchronized Throwable fillInStackTrace() {
 		return this;

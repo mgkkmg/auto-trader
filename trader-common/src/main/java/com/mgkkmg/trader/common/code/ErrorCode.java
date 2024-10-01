@@ -18,6 +18,7 @@ public enum ErrorCode implements ResponseBaseCode {
 	// Util
 	JSON_PROCESS_ERROR("U-001", "Json processing exception"),
 	JSON_NOT_FOUND_SCHEMA("U-002", "JSON Schema 파일을 찾을 수 없습니다."),
+	CAPTURE_SCREENSHOT_ERROR("U-003", "Error capturing screenshot"),
 
 	// Business
 	DUPLICATE("B-001", "Duplicate Value"),
