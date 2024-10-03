@@ -30,6 +30,7 @@ import com.mgkkmg.trader.common.exception.BusinessException;
 import com.mgkkmg.trader.common.response.coin.OrderResponse;
 import com.mgkkmg.trader.common.util.JsonUtils;
 import com.mgkkmg.trader.core.domain.domains.coin.model.dto.TradeInfoDto;
+import com.mgkkmg.trader.core.domain.domains.coin.model.enums.OrderStatus;
 import com.mgkkmg.trader.core.domain.domains.coin.service.TradeService;
 
 import io.micrometer.core.instrument.util.IOUtils;
@@ -137,23 +138,36 @@ public class ExecuteUseCase {
 
 		log.info("analyticMessage: {}", analyticMessage);
 
-		String callAnalyticContent = openAiService.callAi(analyticMessage, chartPath + "/" + fileName, analyticChatOptions);
+		String callAnalyticContent = openAiService.callAi(analyticMessage, chartPath + "/" + fileName,
+			analyticChatOptions);
 		AiCoinResultDto resultDto = JsonUtils.fromJson(callAnalyticContent, AiCoinResultDto.class);
 
 		log.info("resultDto: {}", resultDto);
 
+		// 주문 성공 여부
+		OrderStatus orderStatus = OrderStatus.SUCCESS;
+
 		// 결과에 따른 주문
 		if (Decision.BUY.getKey().equals(resultDto.decision())) {
 			// 매수
-			double currentPrice = marketPriceService.getCurrentPrice(MARKET);
 			double availableBalance = getAvailableBalance();
-			OrderResponse buyOrderResponse = orderExecuteService.executeBuyOrder(MARKET, availableBalance, currentPrice, resultDto.percentage());
+			OrderResponse buyOrderResponse = orderExecuteService.executeBuyOrder(MARKET, availableBalance,
+				resultDto.percentage());
+
+			if (buyOrderResponse == null) {
+				orderStatus = OrderStatus.FAILURE;
+			}
 			log.info("Buy order executed: {}", buyOrderResponse);
 		} else if (Decision.SELL.getKey().equals(resultDto.decision())) {
 			// 매도
 			double currentPrice = marketPriceService.getCurrentPrice(MARKET);
 			double btcBalance = getBtcBalance();
-			OrderResponse sellOrderResponse = orderExecuteService.executeSellOrder(MARKET, btcBalance, currentPrice, resultDto.percentage());
+			OrderResponse sellOrderResponse = orderExecuteService.executeSellOrder(MARKET, btcBalance, currentPrice,
+				resultDto.percentage());
+
+			if (sellOrderResponse == null) {
+				orderStatus = OrderStatus.FAILURE;
+			}
 			log.info("Sell order executed: {}", sellOrderResponse);
 		} else {
 			log.info("No action taken based on AI decision");
@@ -180,7 +194,7 @@ public class ExecuteUseCase {
 			.findFirst()
 			.orElse("0");
 
-		double newCurrentPrice = marketPriceService.getCurrentPrice(MARKET);
+		double btcKrwPrice = marketPriceService.getCurrentPrice(MARKET);
 
 		TradeInfoDto tradeInfoDto = TradeInfoDto.of(
 			resultDto.decision(),
@@ -189,8 +203,9 @@ public class ExecuteUseCase {
 			krwBalance,
 			btcBalance,
 			btcAvgBuyPrice,
-			newCurrentPrice,
-			callReflectionContent
+			btcKrwPrice,
+			callReflectionContent,
+			orderStatus
 		);
 
 		tradeDomainService.createTradeInfo(tradeInfoDto);
@@ -237,7 +252,7 @@ public class ExecuteUseCase {
 	private double calculateTotalBalance(TradeInfoDto trade) {
 		double krwBalance = Double.parseDouble(trade.krwBalance());
 		double btcBalance = Double.parseDouble(trade.btcBalance());
-		double btcPrice = trade.currentBtcPrice();
+		double btcPrice = trade.btcKrwPrice();
 
 		return krwBalance + btcBalance * btcPrice;
 	}

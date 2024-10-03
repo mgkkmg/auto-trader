@@ -27,25 +27,24 @@ public class OrderExecuteService {
 
 	private static final double MINIMUM_ORDER_AMOUNT = 5000.0;
 
-	public OrderResponse executeBuyOrder(String market, double availableBalance, double currentPrice, int investRate) {
+	public OrderResponse executeBuyOrder(String market, double availableBalance, int investRate) {
 		if (availableBalance > 0) {
-			double buyAmount = calculateBuyAmount(availableBalance, currentPrice, investRate);
-
-			if (buyAmount * currentPrice < MINIMUM_ORDER_AMOUNT) {
-				log.info("Calculated buy amount {} is less than minimum order amount {}. Adjusting to minimum.", buyAmount * currentPrice, MINIMUM_ORDER_AMOUNT);
-				buyAmount = MINIMUM_ORDER_AMOUNT / currentPrice;
+			double buyAmount = calculateBuyAmount(availableBalance, investRate);
+			log.info("buyAmount: {}", buyAmount);
+			if (buyAmount < MINIMUM_ORDER_AMOUNT) {
+				log.info("Calculated buy amount {} is less than minimum order amount {}. Adjusting to minimum.", buyAmount, MINIMUM_ORDER_AMOUNT);
+				buyAmount = MINIMUM_ORDER_AMOUNT;
 			}
 
-			if (buyAmount * currentPrice > availableBalance) {
-				log.info("Insufficient balance for buy order. Available: {}, Required: {}", availableBalance, buyAmount * currentPrice);
+			if (buyAmount >= availableBalance) {
+				log.info("Insufficient balance for buy order. Available: {}, Required: {}", availableBalance, buyAmount);
 				return null;
 			}
 
 			Map<String, String> params = new HashMap<>();
 			params.put("market", market);
 			params.put("side", "bid");
-			params.put("volume", String.valueOf(buyAmount));
-			params.put("price", String.valueOf(currentPrice));
+			params.put("price", String.valueOf((long) buyAmount));
 			params.put("ord_type", "price");
 
 			return placeOrder(params);
@@ -67,8 +66,7 @@ public class OrderExecuteService {
 			Map<String, String> params = new HashMap<>();
 			params.put("market", market);
 			params.put("side", "ask");
-			params.put("volume", String.valueOf(sellAmount));
-			params.put("price", null);
+			params.put("volume", String.format("%.8f", sellAmount));
 			params.put("ord_type", "market");
 
 			return placeOrder(params);
@@ -91,18 +89,15 @@ public class OrderExecuteService {
 		);
 	}
 
-	private double calculateBuyAmount(double availableBalance, double currentPrice, int investRate) {
-		// 수수료
-		double feeRate = 0.05;
+	private double calculateBuyAmount(double availableBalance, int investRate) {
+		// 수수료(0.05%)
+		double fee = 0.9995;
 
 		// 사용 가능 잔액의 매수 비율 계산
 		double targetAmount = availableBalance * (investRate / 100.0);
 
 		// 수수료를 고려하여 실제 주문 금액 계산
-		double orderAmount = targetAmount / (1 + feeRate);
-
-		// 현재 가격을 기준으로 구매 가능한 코인 수량 계산
-		return orderAmount / currentPrice;
+		return targetAmount * fee;
 	}
 
 	private double calculateSellAmount(double coinBalance, int investRate) {

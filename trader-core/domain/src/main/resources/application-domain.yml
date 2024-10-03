@@ -20,7 +20,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create # `create` or `none`
+      ddl-auto: update # `create` or `none`
     properties:
       hibernate:
         show_sql: true # to System OutDataSourceConfiguration

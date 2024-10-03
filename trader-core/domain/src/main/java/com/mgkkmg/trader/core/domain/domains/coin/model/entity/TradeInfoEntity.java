@@ -7,10 +7,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.mgkkmg.trader.core.domain.domains.coin.model.dto.TradeInfoDto;
+import com.mgkkmg.trader.core.domain.domains.coin.model.enums.OrderStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -60,6 +63,10 @@ public class TradeInfoEntity {
 	@Column(name = "relection", length = 4000)
 	private String reflection;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "order_status")
+	private OrderStatus orderStatus;
+
 	private TradeInfoEntity(TradeInfoDto tradeInfoDto) {
 		this.decision = Objects.requireNonNull(tradeInfoDto.decision(), "decision은 null이 될 수 없습니다.");
 		this.percentage = tradeInfoDto.percentage();
@@ -67,9 +74,10 @@ public class TradeInfoEntity {
 		this.btcBalance = tradeInfoDto.btcBalance();
 		this.krwBalance = tradeInfoDto.krwBalance();
 		this.btcAvgBuyPrice = tradeInfoDto.btcAvgBuyPrice();
-		this.btcKrwPrice = tradeInfoDto.currentBtcPrice();
+		this.btcKrwPrice = tradeInfoDto.btcKrwPrice();
 		this.createdAt = LocalDateTime.now();
 		this.reflection = tradeInfoDto.reflection();
+		this.orderStatus = tradeInfoDto.orderStatus();
 	}
 
 	public static TradeInfoEntity of(TradeInfoDto tradeInfoDto) {

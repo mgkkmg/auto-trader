@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mgkkmg.trader.common.annotation.DomainService;
 import com.mgkkmg.trader.core.domain.domains.coin.model.dto.TradeInfoDto;
 import com.mgkkmg.trader.core.domain.domains.coin.model.entity.TradeInfoEntity;
+import com.mgkkmg.trader.core.domain.domains.coin.model.enums.OrderStatus;
 import com.mgkkmg.trader.core.domain.domains.coin.repository.TradeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ public class TradeService {
 	public List<TradeInfoDto> getTradeInfoFromLastDays(final int day) {
 		LocalDateTime lastDaysAgo = LocalDateTime.now().minusDays(day);
 
-		return tradeRepository.findAllFromLastDays(lastDaysAgo).stream().map(TradeInfoDto::fromEntity).toList();
+		return tradeRepository.findSuccessfulTradesFromLastDays(lastDaysAgo, OrderStatus.SUCCESS).stream()
+			.map(TradeInfoDto::fromEntity)
+			.toList();
 	}
 }

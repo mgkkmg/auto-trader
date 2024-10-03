@@ -1,6 +1,7 @@
 package com.mgkkmg.trader.core.domain.domains.coin.model.dto;
 
 import com.mgkkmg.trader.core.domain.domains.coin.model.entity.TradeInfoEntity;
+import com.mgkkmg.trader.core.domain.domains.coin.model.enums.OrderStatus;
 
 public record TradeInfoDto(
 	Long id,
@@ -10,8 +11,9 @@ public record TradeInfoDto(
 	String krwBalance,
 	String btcBalance,
 	String btcAvgBuyPrice,
-	Double currentBtcPrice,
-	String reflection
+	Double btcKrwPrice,
+	String reflection,
+	OrderStatus orderStatus
 ) {
 
 	public static TradeInfoDto of(
@@ -21,10 +23,22 @@ public record TradeInfoDto(
 		String krwBalance,
 		String btcBalance,
 		String btcAvgBuyPrice,
-		Double currentBtcPrice,
-		String reflection
+		Double btcKrwPrice,
+		String reflection,
+		OrderStatus orderStatus
 	) {
-		return new TradeInfoDto(null, decision, percentage, reason, krwBalance, btcBalance, btcAvgBuyPrice, currentBtcPrice, reflection);
+		return new TradeInfoDto(
+			null,
+			decision,
+			percentage,
+			reason,
+			krwBalance,
+			btcBalance,
+			btcAvgBuyPrice,
+			btcKrwPrice,
+			reflection,
+			orderStatus
+		);
 	}
 
 	public static TradeInfoDto fromEntity(TradeInfoEntity entity) {
@@ -37,7 +51,8 @@ public record TradeInfoDto(
 			entity.getBtcBalance(),
 			entity.getBtcAvgBuyPrice(),
 			entity.getBtcKrwPrice(),
-			entity.getReflection()
+			entity.getReflection(),
+			entity.getOrderStatus()
 		);
 	}
 }
