@@ -10,6 +10,38 @@ spring:
     activate:
       on-profile: local
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/auto-trader?serverTimezone=Asia/Seoul&characterEncoding=utf8&postfileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create # `create` or `none`
+    properties:
+      hibernate:
+        show_sql: true # to System OutDataSourceConfiguration
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          time_zone: Asia/Seoul # @CreatedDate 필드의 Time Zone 값 설정
+
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    org.springframework.orm: TRACE
+    org.springframework.transaction: TRACE
+    com.zaxxer.hikari: TRACE
+    com.mysql.cj.jdbc: TRACE
+
 ---
 spring:
   config:

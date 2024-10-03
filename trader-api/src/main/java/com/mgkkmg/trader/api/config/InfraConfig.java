@@ -8,7 +8,7 @@ import com.mgkkmg.trader.core.infra.importer.EnableAutoTraderConfig;
 @Configuration(proxyBeanMethods = false)
 @EnableAutoTraderConfig({
 	AutoTraderConfigGroup.JASYPT,
-	AutoTraderConfigGroup.JPA,
+	// AutoTraderConfigGroup.JPA,
 	AutoTraderConfigGroup.UPBIT
 })
 public class InfraConfig {

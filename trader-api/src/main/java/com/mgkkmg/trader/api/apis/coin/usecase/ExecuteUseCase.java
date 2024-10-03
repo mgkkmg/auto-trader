@@ -1,9 +1,12 @@
 package com.mgkkmg.trader.api.apis.coin.usecase;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.ta4j.core.BarSeries;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -11,20 +14,25 @@ import com.mgkkmg.globalutil.util.NumberUtils;
 import com.mgkkmg.trader.api.apis.ai.dto.AiCoinResultDto;
 import com.mgkkmg.trader.api.apis.ai.service.OpenAiService;
 import com.mgkkmg.trader.api.apis.coin.dto.AccountDto;
+import com.mgkkmg.trader.api.apis.coin.enums.Decision;
 import com.mgkkmg.trader.api.apis.coin.helper.IndicatorCalculator;
 import com.mgkkmg.trader.api.apis.coin.service.AccountInfoService;
 import com.mgkkmg.trader.api.apis.coin.service.CandleService;
 import com.mgkkmg.trader.api.apis.coin.service.ChartService;
 import com.mgkkmg.trader.api.apis.coin.service.FearGreedIndexService;
 import com.mgkkmg.trader.api.apis.coin.service.MarketPriceService;
-import com.mgkkmg.trader.api.apis.coin.service.OrderService;
+import com.mgkkmg.trader.api.apis.coin.service.OrderExecuteService;
 import com.mgkkmg.trader.api.apis.coin.service.OrderbookService;
 import com.mgkkmg.trader.api.apis.coin.service.TaService;
 import com.mgkkmg.trader.common.annotation.UseCase;
 import com.mgkkmg.trader.common.code.ErrorCode;
 import com.mgkkmg.trader.common.exception.BusinessException;
+import com.mgkkmg.trader.common.response.coin.OrderResponse;
 import com.mgkkmg.trader.common.util.JsonUtils;
+import com.mgkkmg.trader.core.domain.domains.coin.model.dto.TradeInfoDto;
+import com.mgkkmg.trader.core.domain.domains.coin.service.TradeService;
 
+import io.micrometer.core.instrument.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,12 +48,28 @@ public class ExecuteUseCase {
 	private final FearGreedIndexService fearGreedIndexService;
 	private final ChartService chartService;
 	private final OpenAiService openAiService;
-	private final OrderService orderService;
+	private final OrderExecuteService orderExecuteService;
 	private final MarketPriceService marketPriceService;
+	private final TradeService tradeDomainService;
 
 	private static final String MARKET = "KRW-BTC";
 	private static final String KRW_CURRENCY = "KRW";
 	private static final String BTC_CURRENCY = "BTC";
+
+	@Value("classpath:schemas/openai_coin_result_schema.json")
+	private Resource coinSchemaResource;
+
+	@Value("classpath:templates/prompt_coin.st")
+	private Resource promptCoinResource;
+
+	@Value("classpath:templates/prompt_coin_trade_reflection.st")
+	private Resource promptCoinTradeReflectionResource;
+
+	@Value("${chart.path}")
+	private String chartPath;
+
+	@Value("${chart.upbit.file-name}")
+	private String fileName;
 
 	public void execute() {
 		// 현재 투자 상태 조회
@@ -73,8 +97,6 @@ public class ExecuteUseCase {
 		// 공포 탐욕 지수
 		String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
 
-		// 최신 뉴스
-
 		// 차트 이미지
 		try {
 			String url = "https://upbit.com/full_chart?code=CRIX.UPBIT.KRW-BTC";
@@ -92,32 +114,86 @@ public class ExecuteUseCase {
 			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator + "\n"
 			+ "Fear and Greed Index: " + fearGreedIndex;
 
-		System.out.println("message :" + message);
+		// 회고 메시지 등록
+		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(7);
+		String tradeInfo = JsonUtils.toJson(tradeInfos);
+		String performance = String.format("%.2f", calculatePerformance(tradeInfos));
 
-		OpenAiChatOptions coinChatOptions = openAiService.getCoinChatOptions();
-		String outputContent = openAiService.callAi(message, coinChatOptions);
-		AiCoinResultDto resultDto = JsonUtils.fromJson(outputContent, AiCoinResultDto.class);
+		OpenAiChatOptions reflectionChatOptions = openAiService.getChatOptions();
+		String reflectionPrompt = resourceToString(promptCoinTradeReflectionResource);
+		String reflectionMessage = reflectionPrompt
+			.replace("{trade_data}", tradeInfo)
+			.replace("{current_market_data}", message)
+			.replace("{performance}", performance);
 
-		log.info("decision: {}", resultDto.decision());
-		log.info("percentage: {}", resultDto.percentage());
-		log.info("reason: {}", resultDto.reason());
+		String callReflectionContent = openAiService.callAi(reflectionMessage, reflectionChatOptions);
+
+		// 분석 메시지 등록
+		OpenAiChatOptions analyticChatOptions = openAiService.getChatOptions(resourceToString(coinSchemaResource));
+		String analyticPrompt = resourceToString(promptCoinResource);
+		String analyticMessage = analyticPrompt
+			.replace("{reflection}", callReflectionContent)
+			.replace("{message}", message);
+
+		log.info("analyticMessage: {}", analyticMessage);
+
+		String callAnalyticContent = openAiService.callAi(analyticMessage, chartPath + "/" + fileName, analyticChatOptions);
+		AiCoinResultDto resultDto = JsonUtils.fromJson(callAnalyticContent, AiCoinResultDto.class);
+
+		log.info("resultDto: {}", resultDto);
 
 		// 결과에 따른 주문
-		// if (Decision.BUY.getKey().equals(resultDto.decision())) {
-		// 	// 매수
-		// 	double currentPrice = marketPriceService.getCurrentPrice(MARKET);
-		// 	double availableBalance = getAvailableBalance();
-		// 	OrderResponse buyOrderResponse = orderService.executeBuyOrder(MARKET, availableBalance, currentPrice, resultDto.percentage());
-		// 	log.info("Buy order executed: {}", buyOrderResponse);
-		// } else if (Decision.SELL.getKey().equals(resultDto.decision())) {
-		// 	// 매도
-		// 	double currentPrice = marketPriceService.getCurrentPrice(MARKET);
-		// 	double btcBalance = getBtcBalance();
-		// 	OrderResponse sellOrderResponse = orderService.executeSellOrder(MARKET, btcBalance, currentPrice, resultDto.percentage());
-		// 	log.info("Sell order executed: {}", sellOrderResponse);
-		// } else {
-		// 	log.info("No action taken based on AI decision");
-		// }
+		if (Decision.BUY.getKey().equals(resultDto.decision())) {
+			// 매수
+			double currentPrice = marketPriceService.getCurrentPrice(MARKET);
+			double availableBalance = getAvailableBalance();
+			OrderResponse buyOrderResponse = orderExecuteService.executeBuyOrder(MARKET, availableBalance, currentPrice, resultDto.percentage());
+			log.info("Buy order executed: {}", buyOrderResponse);
+		} else if (Decision.SELL.getKey().equals(resultDto.decision())) {
+			// 매도
+			double currentPrice = marketPriceService.getCurrentPrice(MARKET);
+			double btcBalance = getBtcBalance();
+			OrderResponse sellOrderResponse = orderExecuteService.executeSellOrder(MARKET, btcBalance, currentPrice, resultDto.percentage());
+			log.info("Sell order executed: {}", sellOrderResponse);
+		} else {
+			log.info("No action taken based on AI decision");
+		}
+
+		// 매매 후 매매 정보 DB 등록
+		List<AccountDto> newAccounts = accountInfoService.getAccounts();
+
+		String krwBalance = newAccounts.stream()
+			.filter(account -> KRW_CURRENCY.equals(account.currency()))
+			.map(AccountDto::balance)
+			.findFirst()
+			.orElse("0");
+
+		String btcBalance = newAccounts.stream()
+			.filter(account -> BTC_CURRENCY.equals(account.currency()))
+			.map(AccountDto::balance)
+			.findFirst()
+			.orElse("0");
+
+		String btcAvgBuyPrice = newAccounts.stream()
+			.filter(account -> BTC_CURRENCY.equals(account.currency()))
+			.map(AccountDto::avgBuyPrice)
+			.findFirst()
+			.orElse("0");
+
+		double newCurrentPrice = marketPriceService.getCurrentPrice(MARKET);
+
+		TradeInfoDto tradeInfoDto = TradeInfoDto.of(
+			resultDto.decision(),
+			resultDto.percentage(),
+			resultDto.reason(),
+			krwBalance,
+			btcBalance,
+			btcAvgBuyPrice,
+			newCurrentPrice,
+			callReflectionContent
+		);
+
+		tradeDomainService.createTradeInfo(tradeInfoDto);
 	}
 
 	private double getAvailableBalance() {
@@ -134,5 +210,35 @@ public class ExecuteUseCase {
 			.findFirst()
 			.map(account -> NumberUtils.parseBalance(account.balance()))
 			.orElse(0.0);
+	}
+
+	private String resourceToString(Resource resource) {
+		try {
+			return IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage(), ErrorCode.JSON_NOT_FOUND_SCHEMA);
+		}
+	}
+
+	private double calculatePerformance(List<TradeInfoDto> trades) {
+		if (trades.isEmpty()) {
+			return 0.0;
+		}
+
+		TradeInfoDto oldestTrade = trades.getLast();
+		TradeInfoDto newestTrade = trades.getFirst();
+
+		double initialBalance = calculateTotalBalance(oldestTrade);
+		double finalBalance = calculateTotalBalance(newestTrade);
+
+		return (finalBalance - initialBalance) / initialBalance * 100;
+	}
+
+	private double calculateTotalBalance(TradeInfoDto trade) {
+		double krwBalance = Double.parseDouble(trade.krwBalance());
+		double btcBalance = Double.parseDouble(trade.btcBalance());
+		double btcPrice = trade.currentBtcPrice();
+
+		return krwBalance + btcBalance * btcPrice;
 	}
 }
