@@ -10,17 +10,11 @@ spring:
     activate:
       on-profile: local
 
-  datasource:
-    url: jdbc:mysql://localhost:3306/auto-trader?serverTimezone=Asia/Seoul&characterEncoding=utf8&postfileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
-    username: root
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update # `create` or `none`
+      ddl-auto: create # option : creqte, create-drop, update, validate, none
     properties:
       hibernate:
         show_sql: true # to System OutDataSourceConfiguration
@@ -28,25 +22,30 @@ spring:
         use_sql_comments: true
         jdbc:
           time_zone: Asia/Seoul # @CreatedDate 필드의 Time Zone 값 설정
-
 logging:
   level:
-    ROOT: INFO
-    org.hibernate: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.sql: debug
-    org.hibernate.type: trace
-    com.zaxxer.hikari.HikariConfig: DEBUG
-    org.springframework.orm: TRACE
-    org.springframework.transaction: TRACE
-    com.zaxxer.hikari: TRACE
-    com.mysql.cj.jdbc: TRACE
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
 
 ---
 spring:
   config:
     activate:
       on-profile: prod
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update # option : creqte, create-drop, update, validate, none
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul # @CreatedDate 필드의 Time Zone 값 설정
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
 
 ---
 spring:

@@ -1,5 +1,6 @@
 package com.mgkkmg.trader.api.apis.scheduler;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ public class CoinTraderExecute {
 	private final ExecuteUseCase executeUseCase;
 
 	@GetMapping("/execute")
+	// @Scheduled(cron = "0 0 0/3 * * *")
 	public void execute() {
 		executeUseCase.execute();
 	}

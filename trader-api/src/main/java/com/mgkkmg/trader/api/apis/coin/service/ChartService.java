@@ -22,10 +22,10 @@ public class ChartService {
 
 	private final WebScreenshot webScreenshot;
 
-	@Value("${chart.path}")
+	@Value("${chart-image.path}")
 	private String chartPath;
 
-	@Value("${chart.upbit.file-name}")
+	@Value("${chart-image.upbit.file-name}")
 	private String fileName;
 
 	public void captureAndSaveScreenshot(String url, String waitForElementSelector) throws IOException {

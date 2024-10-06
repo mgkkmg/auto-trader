@@ -1,0 +1,41 @@
+services:
+  auto-trader-app:
+    container_name: auto-trader-app
+    build:
+      dockerfile: Dockerfile
+      context: ./trader-api
+    image: kmnine3/auto-trader-app
+    ports:
+      - "80:8080"
+    environment:
+      - JASYPT_ENCRYPTOR_PASSWORD=qwerconinasdfstockth
+      - SELENIUM_REMOTE_URL=http://selenium-hub:4444/wd/hub
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-prod:3306/auto-trader
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password555
+    depends_on:
+      - selenium-hub
+      - mysql-prod
+    restart: always
+
+  selenium-hub:
+    container_name: selenium-hub
+    image: selenium/standalone-chrome:112.0
+    ports:
+      - 4444:4444
+    environment:
+      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_SESSION_TIMEOUT=60
+
+  mysql-prod:
+    container_name: mysql-prod
+    image: mysql:8.0.30
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+    #      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=auto-trader
+      - MYSQL_ROOT_PASSWORD=password555
+      - TZ=Asia/Seoul

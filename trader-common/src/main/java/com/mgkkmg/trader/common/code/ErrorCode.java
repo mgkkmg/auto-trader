@@ -19,6 +19,7 @@ public enum ErrorCode implements ResponseBaseCode {
 	JSON_PROCESS_ERROR("U-001", "Json processing exception"),
 	JSON_NOT_FOUND_SCHEMA("U-002", "JSON Schema 파일을 찾을 수 없습니다."),
 	CAPTURE_SCREENSHOT_ERROR("U-003", "Error capturing screenshot"),
+	WEBDRIVER_SETUP_ERROR("U-004", "Invalid remote WebDriver URL"),
 
 	// Business
 	DUPLICATE("B-001", "Duplicate Value"),

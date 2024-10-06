@@ -9,5 +9,5 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_DATABASE=auto-trader
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password555
       - TZ=Asia/Seoul

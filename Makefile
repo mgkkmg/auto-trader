@@ -8,5 +8,4 @@ local-db-up:
 local-db-down:
 	docker-compose -f docker-compose-local.yml down -v
 
-# docker exec -it community-redis redis-cli : 도커 레디스 커맨드라인 접속 명령어
 # docker exec -it mysql-container bash : 도커 MySql Shell 접속 명령어

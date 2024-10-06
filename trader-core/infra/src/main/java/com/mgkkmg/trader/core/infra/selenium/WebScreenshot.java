@@ -1,6 +1,9 @@
 package com.mgkkmg.trader.core.infra.selenium;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -11,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
@@ -83,7 +87,7 @@ public class WebScreenshot {
 
 	private void clickElementWithScroll(WebDriverWait wait, String xpath) {
 		WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
-		((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+		((JavascriptExecutor)webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
 		wait.until(ExpectedConditions.elementToBeClickable(element)).click();
 	}
 
@@ -91,11 +95,25 @@ public class WebScreenshot {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless");
 		options.addArguments("--window-size=1920,1080");
+		options.addArguments("--no-sandbox");
+		options.addArguments("--disable-dev-shm-usage");
+		options.addArguments("--disable-gpu");
+		options.addArguments("--ignore-ssl-errors=yes");
+		options.addArguments("--ignore-certificate-errors");
+
+		String remoteWebDriverUrl = System.getenv("SELENIUM_REMOTE_URL");
+		if (remoteWebDriverUrl != null) {
+			try {
+				return new RemoteWebDriver(URI.create(remoteWebDriverUrl).toURL(), options);
+			} catch (MalformedURLException e) {
+				throw new BusinessException(e.getMessage(), ErrorCode.WEBDRIVER_SETUP_ERROR);
+			}
+		}
 
 		return new ChromeDriver(options);
 	}
 
 	private File takeScreenshot() {
-		return ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
+		return ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.FILE);
 	}
 }
