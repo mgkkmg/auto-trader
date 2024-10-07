@@ -37,7 +37,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update # option : creqte, create-drop, update, validate, none
+      ddl-auto: validate # option : creqte, create-drop, update, validate, none
     properties:
       hibernate:
         jdbc:
