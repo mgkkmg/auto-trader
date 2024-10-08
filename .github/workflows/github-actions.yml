@@ -51,7 +51,7 @@ jobs:
       uses: appleboy/ssh-action@master
       id: deploy-prod
       env:
-        COMPOSE: "/home/ec2-user/docker-compose.yml"
+        COMPOSE: "/home/ubuntu/docker/docker-compose.yml"
       if: contains(github.ref, 'main')
       with:
           host: ${{ secrets.HOST_PROD }}
