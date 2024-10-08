@@ -59,7 +59,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           envs: COMPOSE
           script: |
-            sudo docker-compose -f $COMPOSE down
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker rmi -f $(docker images -q)
             sudo docker pull ${{ secrets.DOCKER_REPO }}/trader-api
             sudo docker-compose -f $COMPOSE up -d
             sudo docker image prune -f
