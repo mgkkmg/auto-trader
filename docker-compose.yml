@@ -2,7 +2,7 @@ services:
   trader-api:
     container_name: trader-api
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-prod
       context: ./trader-api
     image: kmnine3/trader-api
     ports:
@@ -15,11 +15,12 @@ services:
       - selenium-hub
     restart: always
     volumes:
-      - /home/ubuntu/log:/var/log   # 호스트 경로:컨테이너 경로
+      - /Users/mingukang/dev/aws/log:/var/log   # 호스트 경로:컨테이너 경로
 
+# https://github.com/SeleniumHQ/docker-selenium/releases
   selenium-hub:
     container_name: selenium-hub
-    image: selenium/standalone-chrome:112.0
+    image: selenium/standalone-chromium:129.0.6668.58
     ports:
       - 4444:4444
     environment:

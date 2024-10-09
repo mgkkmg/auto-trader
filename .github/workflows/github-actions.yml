@@ -62,5 +62,5 @@ jobs:
             sudo docker rm -f $(docker ps -qa)
             sudo docker rmi -f $(docker images -q)
             sudo docker pull ${{ secrets.DOCKER_REPO }}/trader-api
-            sudo docker-compose -f $COMPOSE up -d
+            sudo docker-compose -f $COMPOSE up --build
             sudo docker image prune -f
