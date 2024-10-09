@@ -20,7 +20,7 @@ services:
 # https://github.com/SeleniumHQ/docker-selenium/releases
   selenium-hub:
     container_name: selenium-hub
-    image: selenium/standalone-chromium:129.0.6668.58
+    image: selenium/standalone-chrome:129.0.6668.58
     ports:
       - 4444:4444
     environment:
