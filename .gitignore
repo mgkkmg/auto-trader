@@ -39,4 +39,4 @@ out/
 logs/
 .env
 db/
-app/
+images/
