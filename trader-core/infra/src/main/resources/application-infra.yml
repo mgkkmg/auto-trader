@@ -15,7 +15,7 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:mysql://localhost:3306/auto-trader?serverTimezone=Asia/Seoul&characterEncoding=utf8&postfileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3306/auto_trader?serverTimezone=Asia/Seoul&characterEncoding=utf8&postfileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
     username: ENC(Tdz4PPc1j9l2RGrP7ZN9sQ==)
     password: ENC(fT9yECXMC06Ys1UsGt8VFWDNwo++b+95)
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -27,7 +27,7 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:mysql://localhost:3306/auto-trader?serverTimezone=Asia/Seoul&characterEncoding=utf8&postfileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
+    url: ENC(CDRccZnw9tudEaQaltSh4H+/gRQxnV/A9kDwu/9G5gj2IMTVqluGDdq2LyaapoGfwbcicRUaKEqOStesBirpx9tj2FmiDnKLEag0PuDGrbcIzhYTxZPd/SE69FJLLaf88+faDWNGTMeKe6MpHcofiQ==)
     username: ENC(+CYuu8jLTg6PHOH/nH6OXw==)
     password: ENC(UF4Z0xMHIXFKmC0Jm8EQxglufSt20xDI)
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -37,3 +37,9 @@ spring:
   config:
     activate:
       on-profile: test
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/auto_trader?serverTimezone=Asia/Seoul&characterEncoding=utf8&postfileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
+    username: ENC(Tdz4PPc1j9l2RGrP7ZN9sQ==)
+    password: ENC(fT9yECXMC06Ys1UsGt8VFWDNwo++b+95)
+    driver-class-name: com.mysql.cj.jdbc.Driver

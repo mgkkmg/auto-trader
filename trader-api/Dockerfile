@@ -12,7 +12,7 @@ RUN rm ./google-chrome-stable_current_amd64.deb
 WORKDIR /app
 
 # 로그 디렉토리 생성
-RUN mkdir -p /app/logs /app/logs/archived
+RUN mkdir -p /app/logs /app/logs/archived /app/iamges
 
 # 포트 오픈
 EXPOSE 8080
