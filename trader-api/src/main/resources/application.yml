@@ -8,7 +8,7 @@ spring:
       api-key: ENC(fUSpAiCEofKjty3tfXpKCLEhHIKPhdfeLBDNlv0SDAtfbq5/fMpTAhFDSe3eJp5VA5NWekM0TqTUVyj8SDm09kUV3v8PIk2b3q2Rwf6ad4CZpka1ZVMFah+iTE0j04rS0u4Z7B7CXiesjg0y16kIVYbGm1/rYsoACFydujj+Z/DheJqCAau9VAjCHGx4gK3Fj5oHK2vJ9I20vsRrqKwXewa4ZJn9poqEvQiiZSAbARQ=)
 
 chart-image:
-  path: ./app/images/chart
+  path: app/images/chart
   upbit:
     file-name: upbit_chart_screenshot.png
 

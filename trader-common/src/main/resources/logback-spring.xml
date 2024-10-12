@@ -55,7 +55,7 @@
             <discardingThreshold>0</discardingThreshold>
         </appender>
 
-        <root level="WARN">
+        <root level="INFO">
             <appender-ref ref="ASYNC" />
             <appender-ref ref="ASYNC_ERROR" />
         </root>
