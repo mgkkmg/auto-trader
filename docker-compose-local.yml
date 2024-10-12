@@ -1,5 +1,5 @@
 services:
-  mysql:
+  mysql-local:
     container_name: mysql-local
     image: mysql:8.0.30
     volumes:

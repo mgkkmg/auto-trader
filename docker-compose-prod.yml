@@ -3,9 +3,8 @@ services:
     container_name: mysql-prod
     image: mysql:8.0.33
     volumes:
-      - ./db/mysql/conf.d:/etc/mysql/conf.d
-      - ./db/mysql/data:/var/lib/mysql
-      - ./db/mysql/init:/docker-entrypoint-initdb.d
+      - ./db/conf.d:/etc/mysql/conf.d
+    #      - mysql-data:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
@@ -16,8 +15,8 @@ services:
   trader-api:
     container_name: trader-api
     build:
-      dockerfile: Dockerfile
-      context: ./
+      dockerfile: Dockerfile-prod
+      context: ./trader-api
     image: kmnine3/trader-api
     ports:
       - "8080:8080"

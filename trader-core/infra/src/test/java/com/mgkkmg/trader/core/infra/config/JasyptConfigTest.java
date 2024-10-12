@@ -4,10 +4,18 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
+@SpringBootTest
+@ContextConfiguration(classes = JasyptConfig.class)
+@TestPropertySource(properties = "jasypt.encryptor.password=${ENCRYPT_KEY}")
 class JasyptConfigTest {
 
-	private final static String ENCRYPT_KEY = "";
+	@Value("${jasypt.encryptor.password}")
+	private String ENCRYPT_KEY;
 
 	@Test
 	void jasypt_암호화() {
