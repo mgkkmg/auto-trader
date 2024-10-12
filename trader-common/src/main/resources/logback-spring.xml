@@ -7,19 +7,7 @@
             </encoder>
         </appender>
 
-        <root level="DEBUG">
-            <appender-ref ref="CONSOLE" />
-        </root>
-    </springProfile>
-
-    <springProfile name="test">
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-            </encoder>
-        </appender>
-
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="CONSOLE" />
         </root>
     </springProfile>
@@ -70,6 +58,18 @@
         <root level="WARN">
             <appender-ref ref="ASYNC" />
             <appender-ref ref="ASYNC_ERROR" />
+        </root>
+    </springProfile>
+
+    <springProfile name="test">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE" />
         </root>
     </springProfile>
 </configuration>
