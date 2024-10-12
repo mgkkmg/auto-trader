@@ -28,8 +28,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/auto-trader?serverTimezone=Asia/Seoul&characterEncoding=utf8&postfileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
-    username: ENC(rdgNsfThA+aaDhK9fB3y0Q==)
-    password: ENC(8fInmJgrcXF1Ka3Xbqgw4/OI7Ksigp0/)
+    username: ENC(+CYuu8jLTg6PHOH/nH6OXw==)
+    password: ENC(UF4Z0xMHIXFKmC0Jm8EQxglufSt20xDI)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 ---

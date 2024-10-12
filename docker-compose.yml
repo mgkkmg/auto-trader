@@ -15,9 +15,6 @@ services:
 
   trader-api:
     container_name: trader-api
-    build:
-      dockerfile: Dockerfile
-      context: ./
     image: kmnine3/trader-api
     ports:
       - "8080:8080"
