@@ -15,11 +15,12 @@ public enum ErrorCode implements ResponseBaseCode {
 	HANDLE_ACCESS_DENIED("C-006", "Access is Denied"),
 	CREATE_JWT_TOKEN_ERROR("C-007", "Jwt Token error"),
 
-	// Util
+	// Util,
 	JSON_PROCESS_ERROR("U-001", "Json processing exception"),
 	JSON_NOT_FOUND_SCHEMA("U-002", "JSON Schema 파일을 찾을 수 없습니다."),
 	CAPTURE_SCREENSHOT_ERROR("U-003", "Error capturing screenshot"),
 	WEBDRIVER_SETUP_ERROR("U-004", "Invalid remote WebDriver URL"),
+	SLACK_ALARM_ERROR("U-005", "슬랙 오류"),
 
 	// Business
 	DUPLICATE("B-001", "Duplicate Value"),
@@ -27,7 +28,7 @@ public enum ErrorCode implements ResponseBaseCode {
 
 	// Member,
 	EMAIL_DUPLICATE("M-001", "Duplicate Email Address"),
-	NICKNAME_DUPLICATE("M-002", "Duplicate Nickname")
+	NICKNAME_DUPLICATE("M-002", "Duplicate Nickname"),
 	;
 
 	private final String code;

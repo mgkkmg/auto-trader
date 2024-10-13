@@ -17,8 +17,10 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.mgkkmg.trader.common.annotation.SlackErrorAlarm;
 import com.mgkkmg.trader.common.exception.BusinessException;
 import com.mgkkmg.trader.common.exception.DuplicateException;
+import com.mgkkmg.trader.common.exception.SlackAlarmException;
 import com.mgkkmg.trader.common.response.ErrorResponse;
 import com.mgkkmg.trader.common.code.ErrorCode;
 
@@ -167,6 +169,7 @@ public class GlobalExceptionHandler {
 			.body(ErrorResponse.of(status, ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage()));
 	}
 
+	@SlackErrorAlarm
 	@ExceptionHandler(BusinessException.class)
 	protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
 		log.error("Handle BusinessException", e);
@@ -177,6 +180,7 @@ public class GlobalExceptionHandler {
 			.body(ErrorResponse.of(status, e.getErrorCode()));
 	}
 
+	@SlackErrorAlarm
 	@ExceptionHandler(DuplicateException.class)
 	protected ResponseEntity<ErrorResponse> handleDuplicationException(final DuplicateException e) {
 		log.error("Handle DuplicationException", e);
@@ -187,6 +191,18 @@ public class GlobalExceptionHandler {
 			.body(ErrorResponse.of(status, e.getErrorCode(), e.getValue()));
 	}
 
+	@SlackErrorAlarm
+	@ExceptionHandler(SlackAlarmException.class)
+	protected ResponseEntity<ErrorResponse> handleDuplicationException(final SlackAlarmException e) {
+		log.error("Handle SlackAlarmException", e);
+
+		final int status = HttpStatus.BAD_GATEWAY.value();
+
+		return ResponseEntity.status(HttpStatus.valueOf(status))
+			.body(ErrorResponse.of(status, e.getErrorCode(), e.getValue()));
+	}
+
+	@SlackErrorAlarm
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ErrorResponse> handleException(Exception e) {
 		log.error("Handle Exception", e);

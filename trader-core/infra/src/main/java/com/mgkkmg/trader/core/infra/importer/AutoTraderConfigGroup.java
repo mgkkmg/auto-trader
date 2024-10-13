@@ -1,5 +1,6 @@
 package com.mgkkmg.trader.core.infra.importer;
 
+import com.mgkkmg.trader.core.infra.config.AsyncConfig;
 import com.mgkkmg.trader.core.infra.config.JasyptConfig;
 import com.mgkkmg.trader.core.infra.config.UpbitConfig;
 
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum AutoTraderConfigGroup {
 
+	ASYNC(AsyncConfig.class),
 	JASYPT(JasyptConfig.class),
 	UPBIT(UpbitConfig.class)
 	;
