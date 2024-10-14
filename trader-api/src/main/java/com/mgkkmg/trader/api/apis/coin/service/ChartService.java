@@ -45,5 +45,7 @@ public class ChartService {
 
 		// Save the image
 		ImageIO.write(image, "png", outputFile);
+
+		webScreenshot.closeWebDriver();
 	}
 }

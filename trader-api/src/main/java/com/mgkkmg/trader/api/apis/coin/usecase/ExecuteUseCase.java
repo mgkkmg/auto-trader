@@ -120,6 +120,9 @@ public class ExecuteUseCase {
 		String performance = String.format("%.2f", calculatePerformance(tradeInfos));
 		String tradeInfo = JsonUtils.toJson(tradeInfos);
 
+		log.info("Check tradeInfos: {}", tradeInfos);
+		log.info("Check Performance: {}", performance);
+
 		OpenAiChatOptions reflectionChatOptions = openAiService.getChatOptions();
 		String reflectionPrompt = resourceToString(promptCoinTradeReflectionResource);
 		String reflectionMessage = reflectionPrompt
