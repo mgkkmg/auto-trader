@@ -23,7 +23,7 @@ public class OpenAiService {
 
 		// OpenAI Chat 옵션 설정
 		return OpenAiChatOptions.builder()
-			.withModel(ChatModel.GPT_4_O_MINI)
+			.withModel(ChatModel.GPT_4_O)
 			.withTemperature(0.7)
 			.build();
 	}
@@ -32,7 +32,7 @@ public class OpenAiService {
 
 		// OpenAI Chat 옵션 설정
 		return OpenAiChatOptions.builder()
-			.withModel(ChatModel.GPT_4_O_MINI)
+			.withModel(ChatModel.GPT_4_O)
 			.withTemperature(0.7)
 			.withResponseFormat(new ResponseFormat(ResponseFormat.Type.JSON_SCHEMA, schema))
 			.build();
