@@ -3,7 +3,6 @@ package com.mgkkmg.trader.core.infra.selenium;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -17,16 +16,13 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.stereotype.Component;
 
 import com.mgkkmg.trader.common.code.ErrorCode;
 import com.mgkkmg.trader.common.exception.BusinessException;
 
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
 public class WebScreenshot {
 
 	private final WebDriver webDriver;
