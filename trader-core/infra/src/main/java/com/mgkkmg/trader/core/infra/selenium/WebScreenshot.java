@@ -37,7 +37,6 @@ public class WebScreenshot {
 		this.webDriver = setupWebDriver();
 	}
 
-	@PreDestroy
 	public void closeWebDriver() {
 		if (webDriver != null) {
 			webDriver.quit();
@@ -77,6 +76,8 @@ public class WebScreenshot {
 			Thread.currentThread().interrupt();
 			log.error("Screenshot capture was interrupted", e);
 			throw new BusinessException("Screenshot capture was interrupted", ErrorCode.CAPTURE_SCREENSHOT_ERROR);
+		} finally {
+			closeWebDriver();
 		}
 	}
 
