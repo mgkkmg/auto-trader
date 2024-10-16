@@ -10,3 +10,13 @@ services:
     restart: always
     volumes:
       - ./logs:/app/logs
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./conf:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - trader-api
