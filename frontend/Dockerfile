@@ -31,7 +31,6 @@ RUN adduser --system --uid 1001 nextjs
 
 # 빌드 단계에서 생성된 결과만 복사
 # next.config.mjs 에 standalone 디렉토리 설정 추가 -> standalone 파일 사용하여 프로젝트 실행
-COPY --from=builder /usr/src/app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/static ./.next/static
 
