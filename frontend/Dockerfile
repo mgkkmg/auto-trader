@@ -17,9 +17,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY auto-trader .
 
-# next.config.js 확인
-RUN cat next.config.js
-
 # 빌드 시도 및 로그 출력
 RUN yarn build || (echo "Build failed. Yarn logs:" && yarn logs && exit 1)
 
