@@ -47,7 +47,7 @@ jobs:
     ## Install dependencies and build NextJS app
     - name: Install and build NextJS app
       run: |
-        cd frontend  # Adjust this path if your NextJS app is in a different directory
+        cd ./frontend/auto-trader  # Adjust this path if your NextJS app is in a different directory
         yarn install
         yarn build
 
