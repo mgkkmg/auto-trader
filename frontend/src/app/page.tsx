@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Monitoring from './monitoring';
+import Monitoring from './pages/monitoring';
 
 export default function Home() {
     return (
@@ -7,7 +7,7 @@ export default function Home() {
             <Head>
                 <title>Bitcoin Trading Dashboard</title>
                 <meta name="description" content="Monitor your automated Bitcoin trading" />
-                <link rel="icon" href="../favicon.ico" />
+                <link rel="icon" href="./favicon.ico" />
             </Head>
 
             <main>
