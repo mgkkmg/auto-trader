@@ -58,7 +58,7 @@ jobs:
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -f ./trader-api/Dockerfile -t ${{ secrets.DOCKER_REPO }}/trader-api .
         docker push ${{ secrets.DOCKER_REPO }}/trader-api
-        docker build --progress=plain -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO }}/frontend ./frontend || (echo "Frontend build failed. Docker logs:" && docker logs $(docker ps -lq) && exit 1)
+        docker build --progress=plain -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO }}/frontend ./frontend
         docker push ${{ secrets.DOCKER_REPO }}/frontend
 
     ## AWS EC2에 접속하고 develop을 배포합니다.

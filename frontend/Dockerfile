@@ -7,11 +7,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 
 # 노드 패키지 설치
-# --frozen-lockfile 옵션으로 yarn.lock 파일에 작성한 그대로 패키지를 설치하도록
-# 캐시 삭제해서 1차 이미지 경량화
 COPY auto-trader/package.json auto-trader/yarn.lock ./
-RUN yarn --frozen-lockfile --production;
-RUN rm -rf ./.next/cache
+RUN yarn install --frozen-lockfile --production=false
+RUN yarn cache clean
 
 # 프로젝트 빌드
 FROM base AS builder
@@ -24,7 +22,7 @@ RUN ls -la
 RUN cat package.json
 
 # 빌드 시도 및 로그 출력
-RUN yarn build || (echo "Build failed. Yarn logs:" && cat $(yarn cache dir)/yarn-error.log && exit 1)
+RUN yarn build || (echo "Build failed. Yarn logs:" && yarn logs && exit 1)
 
 # 프로젝트 실행
 FROM base AS runner
