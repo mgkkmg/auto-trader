@@ -32,7 +32,7 @@ const Monitoring: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/coin/monitoring');
+                const response = await axios.get('/api/coin/monitoring');
                 const { result } = response.data;
                 setPerformanceData(result);
             } catch (error) {
