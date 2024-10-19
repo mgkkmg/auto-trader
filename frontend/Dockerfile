@@ -19,7 +19,12 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY auto-trader .
 
-RUN yarn build
+# 디버깅을 위해 파일 목록 출력
+RUN ls -la
+RUN cat package.json
+
+# 빌드 시도 및 로그 출력
+RUN yarn build || (echo "Build failed. Yarn logs:" && cat $(yarn cache dir)/yarn-error.log && exit 1)
 
 # 프로젝트 실행
 FROM base AS runner
