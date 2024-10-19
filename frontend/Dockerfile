@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 # 노드 패키지 설치
 # --frozen-lockfile 옵션으로 yarn.lock 파일에 작성한 그대로 패키지를 설치하도록
 # 캐시 삭제해서 1차 이미지 경량화
-COPY package.json yarn.lock ./
+COPY auto-trader/package.json auto-trader/yarn.lock ./
 RUN yarn --frozen-lockfile --production;
 RUN rm -rf ./.next/cache
 
