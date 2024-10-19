@@ -16,6 +16,7 @@ import com.mgkkmg.trader.api.apis.ai.service.OpenAiService;
 import com.mgkkmg.trader.api.apis.coin.dto.AccountDto;
 import com.mgkkmg.trader.api.apis.coin.enums.Decision;
 import com.mgkkmg.trader.api.apis.coin.helper.IndicatorCalculator;
+import com.mgkkmg.trader.api.apis.coin.helper.PerformanceCalculator;
 import com.mgkkmg.trader.api.apis.coin.service.AccountInfoService;
 import com.mgkkmg.trader.api.apis.coin.service.CandleService;
 import com.mgkkmg.trader.api.apis.coin.service.ChartService;
@@ -89,8 +90,10 @@ public class ExecuteUseCase {
 		String hourlyCandle = JsonUtils.toJson(candleService.getCandlesMinutes(MARKET));
 
 		// 보조 지표 넣기
-		BarSeries dailySeries = taService.createBarSeries(JsonUtils.fromJson(dailyCandle, new TypeReference<>() {}), true);
-		BarSeries hourlySeries = taService.createBarSeries(JsonUtils.fromJson(hourlyCandle, new TypeReference<>() {}), false);
+		BarSeries dailySeries = taService.createBarSeries(JsonUtils.fromJson(dailyCandle, new TypeReference<>() {
+		}), true);
+		BarSeries hourlySeries = taService.createBarSeries(JsonUtils.fromJson(hourlyCandle, new TypeReference<>() {
+		}), false);
 
 		String dailyCandleWithIndicator = IndicatorCalculator.getIndicatorsAsJson(dailySeries);
 		String hourlyCandleWithIndicator = IndicatorCalculator.getIndicatorsAsJson(hourlySeries);
@@ -117,7 +120,7 @@ public class ExecuteUseCase {
 
 		// 회고 메시지 등록
 		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(7);
-		String performance = String.format("%.2f", calculatePerformance(tradeInfos));
+		String performance = String.format("%.2f", PerformanceCalculator.getPerformance(tradeInfos));
 		String tradeInfo = JsonUtils.toJson(tradeInfos);
 
 		log.info("Check Performance: {}", performance);
@@ -235,27 +238,5 @@ public class ExecuteUseCase {
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage(), ErrorCode.JSON_NOT_FOUND_SCHEMA);
 		}
-	}
-
-	private double calculatePerformance(List<TradeInfoDto> trades) {
-		if (trades.isEmpty()) {
-			return 0.0;
-		}
-
-		TradeInfoDto oldestTrade = trades.getLast();
-		TradeInfoDto newestTrade = trades.getFirst();
-
-		double initialBalance = calculateTotalBalance(oldestTrade);
-		double finalBalance = calculateTotalBalance(newestTrade);
-
-		return (finalBalance - initialBalance) / initialBalance * 100;
-	}
-
-	private double calculateTotalBalance(TradeInfoDto trade) {
-		double krwBalance = Double.parseDouble(trade.krwBalance());
-		double btcBalance = Double.parseDouble(trade.btcBalance());
-		double btcPrice = trade.btcKrwPrice();
-
-		return krwBalance + btcBalance * btcPrice;
 	}
 }

@@ -16,4 +16,6 @@ public interface TradeRepository extends JpaRepository<TradeInfoEntity, Long> {
 
 	@Query("SELECT ti FROM TradeInfoEntity ti WHERE ti.createdAt >= :lastDaysAgo AND ti.orderStatus = :status ORDER BY ti.createdAt DESC")
 	List<TradeInfoEntity> findSuccessfulTradesFromLastDays(@Param("lastDaysAgo") LocalDateTime lastDaysAgo, @Param("status") OrderStatus status);
+
+	List<TradeInfoEntity> findAllByOrderStatusIsNotOrderByCreatedAtDesc(OrderStatus status);
 }

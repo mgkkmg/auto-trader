@@ -38,6 +38,19 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew clean :trader-api:buildNeeded --stacktrace --info --refresh-dependencies -x test
 
+    ## Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.14.0'
+
+    ## Install dependencies and build NextJS app
+    - name: Install and build NextJS app
+      run: |
+        cd frontend  # Adjust this path if your NextJS app is in a different directory
+        yarn install
+        yarn build
+
     ## docker build & push to production
     - name: Docker build & push to prod
       if: contains(github.ref, 'main')
@@ -45,6 +58,8 @@ jobs:
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -f ./trader-api/Dockerfile -t ${{ secrets.DOCKER_REPO }}/trader-api .
         docker push ${{ secrets.DOCKER_REPO }}/trader-api
+        docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO }}/frontend ./frontend
+        docker push ${{ secrets.DOCKER_REPO }}/frontend
 
     ## AWS EC2에 접속하고 develop을 배포합니다.
     - name: Deploy to prod
@@ -63,5 +78,6 @@ jobs:
             sudo docker rm $(sudo docker ps -a -q)
             sudo docker rmi $(sudo docker images -q)
             sudo docker pull ${{ secrets.DOCKER_REPO }}/trader-api
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/frontend
             sudo docker-compose -f $COMPOSE up --build -d
             sudo docker image prune -f
