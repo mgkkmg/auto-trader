@@ -14,7 +14,7 @@ public class CoinTraderExecute {
 	private final ExecuteUseCase executeUseCase;
 
 	// @GetMapping("/execute")
-	@Scheduled(cron = "0 0 0/3 * * *")
+	@Scheduled(cron = "0 0 0/4 * * *")
 	public void execute() {
 		executeUseCase.execute();
 	}

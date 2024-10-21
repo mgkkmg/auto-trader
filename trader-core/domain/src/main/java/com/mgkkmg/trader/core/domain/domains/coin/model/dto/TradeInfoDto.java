@@ -1,7 +1,5 @@
 package com.mgkkmg.trader.core.domain.domains.coin.model.dto;
 
-import java.time.LocalDateTime;
-
 import com.mgkkmg.trader.core.domain.domains.coin.model.entity.TradeInfoEntity;
 import com.mgkkmg.trader.core.domain.domains.coin.model.enums.OrderStatus;
 
@@ -16,7 +14,7 @@ public record TradeInfoDto(
 	Double btcKrwPrice,
 	String reflection,
 	OrderStatus orderStatus,
-	LocalDateTime createdAt
+	String createdAt
 ) {
 
 	public static TradeInfoDto of(
@@ -57,7 +55,7 @@ public record TradeInfoDto(
 			entity.getBtcKrwPrice(),
 			entity.getReflection(),
 			entity.getOrderStatus(),
-			entity.getCreatedAt()
+			entity.getCreatedAt().toString()
 		);
 	}
 }
