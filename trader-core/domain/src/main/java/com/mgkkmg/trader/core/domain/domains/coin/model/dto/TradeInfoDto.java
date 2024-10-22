@@ -58,4 +58,20 @@ public record TradeInfoDto(
 			entity.getCreatedAt().toString()
 		);
 	}
+
+	public static TradeInfoDto reflectionData(TradeInfoDto data) {
+		return new TradeInfoDto(
+			null,
+			data.decision,
+			data.percentage,
+			data.reason,
+			data.krwBalance,
+			data.btcBalance,
+			data.btcAvgBuyPrice,
+			data.btcKrwPrice,
+			"",
+			null,
+			data.createdAt
+		);
+	}
 }

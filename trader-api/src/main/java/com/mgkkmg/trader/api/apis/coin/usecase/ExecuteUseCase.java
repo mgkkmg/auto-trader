@@ -121,9 +121,14 @@ public class ExecuteUseCase {
 		// 회고 메시지 등록
 		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(7);
 		String performance = String.format("%.2f", PerformanceCalculator.getPerformance(tradeInfos));
-		String tradeInfo = JsonUtils.toJson(tradeInfos);
+		String tradeInfo = JsonUtils.toJson(
+			tradeInfos.stream()
+				.map(TradeInfoDto::reflectionData)
+				.toList()
+		);
 
 		log.info("Check Performance: {}", performance);
+		log.info("tradeInfo: {}", tradeInfo);
 
 		OpenAiChatOptions reflectionChatOptions = openAiService.getChatOptions();
 		String reflectionPrompt = resourceToString(promptCoinTradeReflectionResource);
