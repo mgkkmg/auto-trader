@@ -26,7 +26,7 @@ public class MonitoringUseCase {
 		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(365);
 
 		// 성과 계산
-		double performance = PerformanceCalculator.getPerformance2(tradeInfos);
+		double performance = PerformanceCalculator.getPerformance(tradeInfos);
 
 		// 거래 결정 분포 계산
 		Map<String, Long> decisionDistribution = tradeHistory.stream()
