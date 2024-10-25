@@ -2,7 +2,6 @@ package com.mgkkmg.trader.api.apis.coin.helper;
 
 import java.util.List;
 
-import com.mgkkmg.trader.api.apis.coin.enums.Decision;
 import com.mgkkmg.trader.core.domain.domains.coin.model.dto.TradeInfoDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,58 +32,42 @@ public class PerformanceCalculator {
 			return 0.0;
 		}
 
-		// 계산을 위한 변수 초기화
-		double initialTotalAsset = 0;
-		double finalTotalAsset = 0;
-		double cumulativeInvestment = 0;
+		double initialKRW = Double.parseDouble(trades.getFirst().krwBalance());
+		double initialBTCValue = Double.parseDouble(trades.getFirst().btcBalance()) * trades.getFirst().btcKrwPrice();
+		double initialTotal = initialKRW + initialBTCValue;
 
-		// 초기 자산 계산
-		TradeInfoDto firstTrade = trades.getFirst();
-		initialTotalAsset = Double.parseDouble(firstTrade.krwBalance()) + Double.parseDouble(firstTrade.btcBalance()) * firstTrade.btcKrwPrice();
-		cumulativeInvestment += initialTotalAsset;
-
-		// 이전 잔고 저장용 변수
-		double prevKrwBalance = Double.parseDouble(firstTrade.krwBalance());
-		double prevBtcBalance = Double.parseDouble(firstTrade.btcBalance());
+		double totalDeposits = 0;
+		double totalWithdrawals = 0;
 
 		for (int i = 1; i < trades.size(); i++) {
-			TradeInfoDto currentTrade = trades.get(i);
-			String decision = currentTrade.decision();
-			double percentage = currentTrade.percentage() / 100.0;
+			TradeInfoDto prev = trades.get(i - 1);
+			TradeInfoDto curr = trades.get(i);
 
-			// 입금 금액 추정
-			double krwBalanceChange = Double.parseDouble(currentTrade.krwBalance()) - prevKrwBalance;
-			double btcBalanceChange = Double.parseDouble(currentTrade.btcBalance()) - prevBtcBalance;
+			double btcChange = Double.parseDouble(curr.btcBalance()) - Double.parseDouble(prev.btcBalance());
+			double btcKrwPrice = curr.btcKrwPrice();
 
-			if (Decision.BUY.getKey().equals(decision)) {
-				// 매수 시 KRW 잔고가 감소해야 하지만 증가하면 입금으로 추정
-				if (krwBalanceChange > 0) {
-					cumulativeInvestment += krwBalanceChange;
-				}
-			} else if (Decision.SELL.getKey().equals(decision)) {
-				// 매도 시 KRW 잔고 증가분에서 매도 금액을 제외한 나머지가 입금으로 추정
-				double estimatedSellAmount = prevBtcBalance * percentage * currentTrade.btcKrwPrice();
-				double deposit = krwBalanceChange - estimatedSellAmount;
-				if (deposit > 0) {
-					cumulativeInvestment += deposit;
+			double expectedKRWBalance = Double.parseDouble(prev.krwBalance()) - btcChange * btcKrwPrice;
+			double actualKRWBalance = Double.parseDouble(curr.krwBalance());
+			double krwDifference = actualKRWBalance - expectedKRWBalance;
+
+			if (Math.abs(krwDifference) > 1) { // 입출금으로 간주되는 임계값
+				if (krwDifference > 0) {
+					totalDeposits += krwDifference;
+				} else {
+					totalWithdrawals += -krwDifference;
 				}
 			}
-
-			// 잔고 업데이트
-			prevKrwBalance = Double.parseDouble(currentTrade.krwBalance());
-			prevBtcBalance = Double.parseDouble(currentTrade.btcBalance());
 		}
 
-		// 최종 자산 계산
-		TradeInfoDto lastTrade = trades.getLast();
-		finalTotalAsset = Double.parseDouble(lastTrade.krwBalance()) + Double.parseDouble(lastTrade.btcBalance()) * lastTrade.btcKrwPrice();
+		TradeInfoDto lastTransaction = trades.getLast();
+		double finalKRW = Double.parseDouble(lastTransaction.krwBalance());
+		double finalBTCValue = Double.parseDouble(lastTransaction.btcBalance()) * lastTransaction.btcKrwPrice();
+		double finalTotal = finalKRW + finalBTCValue;
 
-		log.info("초기 총자산: {} KRW", String.format("%.2f", initialTotalAsset));
-		log.info("최종 총자산: {} KRW", String.format("%.2f", finalTotalAsset));
-		log.info("누적 투자금: {} KRW", String.format("%.2f", cumulativeInvestment));
+		double netInvestment = initialTotal + totalDeposits - totalWithdrawals;
+		double profit = finalTotal - netInvestment;
 
-		// 누적 수익률 계산
-		return (finalTotalAsset - cumulativeInvestment) / cumulativeInvestment * 100;
+		return (profit / netInvestment) * 100;
 	}
 
 	private static double calculateTotalBalance(TradeInfoDto trade) {

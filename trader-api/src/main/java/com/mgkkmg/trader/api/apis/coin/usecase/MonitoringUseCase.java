@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.mgkkmg.trader.api.apis.coin.dto.MonitoringDto;
-import com.mgkkmg.trader.api.apis.coin.helper.ProfitAnalysis;
+import com.mgkkmg.trader.api.apis.coin.helper.PerformanceCalculator;
 import com.mgkkmg.trader.common.annotation.UseCase;
 import com.mgkkmg.trader.core.domain.domains.coin.model.dto.TradeInfoDto;
 import com.mgkkmg.trader.core.domain.domains.coin.service.TradeService;
@@ -26,8 +26,7 @@ public class MonitoringUseCase {
 		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(365);
 
 		// 성과 계산
-		ProfitAnalysis profitAnalysis = new ProfitAnalysis(tradeInfos);
-		double performance = profitAnalysis.analyzeProfit();
+		double performance = PerformanceCalculator.getPerformance2(tradeInfos);
 
 		// 거래 결정 분포 계산
 		Map<String, Long> decisionDistribution = tradeHistory.stream()
