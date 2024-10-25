@@ -89,6 +89,7 @@ const Monitoring: React.FC = () => {
                         <thead>
                         <tr>
                             <th className="px-4 py-2 w-20">Trade #</th>
+                            <th className="px-4 py-2 w-40">Created At</th>
                             <th className="px-4 py-2 w-24">Decision</th>
                             <th className="px-4 py-2 w-24">Percentage</th>
                             <th className="px-4 py-2 w-[2000px]">Reason</th>
@@ -98,13 +99,13 @@ const Monitoring: React.FC = () => {
                             <th className="px-4 py-2 w-48">BTC Avg Buy Price</th>
                             <th className="px-4 py-2 w-40">BTC KRW Price</th>
                             <th className="px-4 py-2 w-[3800px]">Reflection</th>
-                            <th className="px-4 py-2 w-40">Created At</th>
                         </tr>
                         </thead>
                         <tbody>
                         {tradeHistory.map((trade, index) => (
                             <tr key={index}>
                                 <td className="border px-4 py-2">{index + 1}</td>
+                                <td className="border px-4 py-2">{trade.createdAt}</td>
                                 <td className="border px-4 py-2">{trade.decision}</td>
                                 <td className="border px-4 py-2">{trade.percentage.toFixed(2)}%</td>
                                 <td className="border px-4 py-2">{trade.reason}</td>
@@ -114,7 +115,6 @@ const Monitoring: React.FC = () => {
                                 <td className="border px-4 py-2">{trade.btcAvgBuyPrice}</td>
                                 <td className="border px-4 py-2">{trade.btcKrwPrice}</td>
                                 <td className="border px-4 py-2">{trade.reflection}</td>
-                                <td className="border px-4 py-2">{trade.createdAt}</td>
                             </tr>
                         ))}
                         </tbody>

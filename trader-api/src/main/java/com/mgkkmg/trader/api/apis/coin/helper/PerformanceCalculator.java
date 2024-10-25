@@ -2,6 +2,7 @@ package com.mgkkmg.trader.api.apis.coin.helper;
 
 import java.util.List;
 
+import com.mgkkmg.trader.api.apis.coin.enums.Decision;
 import com.mgkkmg.trader.core.domain.domains.coin.model.dto.TradeInfoDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -55,12 +56,12 @@ public class PerformanceCalculator {
 			double krwBalanceChange = Double.parseDouble(currentTrade.krwBalance()) - prevKrwBalance;
 			double btcBalanceChange = Double.parseDouble(currentTrade.btcBalance()) - prevBtcBalance;
 
-			if (decision.equals("buy")) {
+			if (Decision.BUY.getKey().equals(decision)) {
 				// 매수 시 KRW 잔고가 감소해야 하지만 증가하면 입금으로 추정
 				if (krwBalanceChange > 0) {
 					cumulativeInvestment += krwBalanceChange;
 				}
-			} else if (decision.equals("sell")) {
+			} else if (Decision.SELL.getKey().equals(decision)) {
 				// 매도 시 KRW 잔고 증가분에서 매도 금액을 제외한 나머지가 입금으로 추정
 				double estimatedSellAmount = prevBtcBalance * percentage * currentTrade.btcKrwPrice();
 				double deposit = krwBalanceChange - estimatedSellAmount;

@@ -32,8 +32,8 @@ public class TradeService {
 			.toList();
 	}
 
-	public List<TradeInfoDto> getAllTradesExceptSkip() {
-		return tradeRepository.findAllByOrderStatusOrderByCreatedAtDesc(OrderStatus.SUCCESS).stream()
+	public List<TradeInfoDto> getAllTradesOrderedByCreatedAtDesc() {
+		return tradeRepository.findAllByOrderStatusIsNotOrderByCreatedAtDesc(OrderStatus.SKIP).stream()
 			.map(TradeInfoDto::fromEntity)
 			.toList();
 	}

@@ -16,7 +16,7 @@ import com.mgkkmg.trader.api.apis.ai.service.OpenAiService;
 import com.mgkkmg.trader.api.apis.coin.dto.AccountDto;
 import com.mgkkmg.trader.api.apis.coin.enums.Decision;
 import com.mgkkmg.trader.api.apis.coin.helper.IndicatorCalculator;
-import com.mgkkmg.trader.api.apis.coin.helper.PerformanceCalculator;
+import com.mgkkmg.trader.api.apis.coin.helper.ProfitAnalysis;
 import com.mgkkmg.trader.api.apis.coin.service.AccountInfoService;
 import com.mgkkmg.trader.api.apis.coin.service.CandleService;
 import com.mgkkmg.trader.api.apis.coin.service.ChartService;
@@ -120,7 +120,9 @@ public class ExecuteUseCase {
 
 		// 회고 메시지 등록
 		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(7);
-		String performance = String.format("%.2f", PerformanceCalculator.getPerformance2(tradeInfos));
+
+		ProfitAnalysis profitAnalysis = new ProfitAnalysis(tradeInfos);
+		String performance = String.format("%.2f", profitAnalysis.analyzeProfit());
 		String tradeInfo = JsonUtils.toJson(
 			tradeInfos.stream()
 				.map(TradeInfoDto::reflectionData)
