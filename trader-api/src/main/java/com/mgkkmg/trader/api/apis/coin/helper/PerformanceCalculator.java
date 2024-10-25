@@ -32,60 +32,58 @@ public class PerformanceCalculator {
 			return 0.0;
 		}
 
-		double initialKrwBalance = Double.parseDouble(trades.getFirst().krwBalance());
-		double initialBtcBalance = Double.parseDouble(trades.getFirst().btcBalance());
-		double initialBtcPrice = trades.getFirst().btcKrwPrice();
+		// 계산을 위한 변수 초기화
+		double initialTotalAsset = 0;
+		double finalTotalAsset = 0;
+		double cumulativeInvestment = 0;
 
-		// 총 투자금 (초기 자본 + 추가 입금)
-		double totalInvested = initialKrwBalance + initialBtcBalance * initialBtcPrice;
+		// 초기 자산 계산
+		TradeInfoDto firstTrade = trades.getFirst();
+		initialTotalAsset = Double.parseDouble(firstTrade.krwBalance()) + Double.parseDouble(firstTrade.btcBalance()) * firstTrade.btcKrwPrice();
+		cumulativeInvestment += initialTotalAsset;
 
-		double previousKrwBalance = initialKrwBalance;
-		double previousBtcBalance = initialBtcBalance;
+		// 이전 잔고 저장용 변수
+		double prevKrwBalance = Double.parseDouble(firstTrade.krwBalance());
+		double prevBtcBalance = Double.parseDouble(firstTrade.btcBalance());
 
 		for (int i = 1; i < trades.size(); i++) {
 			TradeInfoDto currentTrade = trades.get(i);
+			String decision = currentTrade.decision();
+			double percentage = currentTrade.percentage() / 100.0;
 
-			// 예상 KRW 잔액 계산
-			double expectedKrwBalance = previousKrwBalance;
+			// 입금 금액 추정
+			double krwBalanceChange = Double.parseDouble(currentTrade.krwBalance()) - prevKrwBalance;
+			double btcBalanceChange = Double.parseDouble(currentTrade.btcBalance()) - prevBtcBalance;
 
-			// 거래에 따른 KRW 및 BTC 잔액 변화 계산
-			if (currentTrade.decision().equalsIgnoreCase("buy")) {
-				double krwSpent = (double)currentTrade.percentage() / 100 * (previousKrwBalance + previousBtcBalance * currentTrade.btcKrwPrice());
-				expectedKrwBalance -= krwSpent;
-			} else if (currentTrade.decision().equalsIgnoreCase("sell")) {
-				double btcToSell = (double)currentTrade.percentage() / 100 * previousBtcBalance;
-				double krwGained = btcToSell * currentTrade.btcKrwPrice();
-				expectedKrwBalance += krwGained;
+			if (decision.equals("buy")) {
+				// 매수 시 KRW 잔고가 감소해야 하지만 증가하면 입금으로 추정
+				if (krwBalanceChange > 0) {
+					cumulativeInvestment += krwBalanceChange;
+				}
+			} else if (decision.equals("sell")) {
+				// 매도 시 KRW 잔고 증가분에서 매도 금액을 제외한 나머지가 입금으로 추정
+				double estimatedSellAmount = prevBtcBalance * percentage * currentTrade.btcKrwPrice();
+				double deposit = krwBalanceChange - estimatedSellAmount;
+				if (deposit > 0) {
+					cumulativeInvestment += deposit;
+				}
 			}
 
-			// 실제 KRW 잔액과 예상 잔액의 차이 계산
-			double krwDifference = Double.parseDouble(currentTrade.krwBalance()) - expectedKrwBalance;
-
-			// 추가 입금이 있는지 확인
-			if (krwDifference > 1e-6) { // 작은 오차 허용
-				totalInvested += krwDifference;
-			}
-
-			// 상태 업데이트
-			previousKrwBalance = Double.parseDouble(currentTrade.krwBalance());
-			previousBtcBalance = Double.parseDouble(currentTrade.btcBalance());
+			// 잔고 업데이트
+			prevKrwBalance = Double.parseDouble(currentTrade.krwBalance());
+			prevBtcBalance = Double.parseDouble(currentTrade.btcBalance());
 		}
 
 		// 최종 자산 계산
 		TradeInfoDto lastTrade = trades.getLast();
-		double finalKrwBalance = Double.parseDouble(lastTrade.krwBalance());
-		double finalBtcBalance = Double.parseDouble(lastTrade.btcBalance());
-		double finalBtcPrice = lastTrade.btcKrwPrice();
-		double finalTotalAssets = finalKrwBalance + finalBtcBalance * finalBtcPrice;
+		finalTotalAsset = Double.parseDouble(lastTrade.krwBalance()) + Double.parseDouble(lastTrade.btcBalance()) * lastTrade.btcKrwPrice();
 
-		// 총 수익 및 수익률 계산
-		double totalProfit = finalTotalAssets - totalInvested;
+		log.info("초기 총자산: {} KRW", String.format("%.2f", initialTotalAsset));
+		log.info("최종 총자산: {} KRW", String.format("%.2f", finalTotalAsset));
+		log.info("누적 투자금: {} KRW", String.format("%.2f", cumulativeInvestment));
 
-		log.info("총 투자금 (초기 자본 + 추가 입금): {} KRW", String.format("%.2f", totalInvested));
-		log.info("최종 총 자산: {} KRW", String.format("%.2f", finalTotalAssets));
-		log.info("총 수익: {} KRW", String.format("%.2f", totalProfit));
-
-		return (totalProfit / totalInvested) * 100;
+		// 누적 수익률 계산
+		return (finalTotalAsset - cumulativeInvestment) / cumulativeInvestment * 100;
 	}
 
 	private static double calculateTotalBalance(TradeInfoDto trade) {
