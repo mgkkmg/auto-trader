@@ -99,7 +99,7 @@ public class ExecuteUseCase {
 		String hourlyCandleWithIndicator = IndicatorCalculator.getIndicatorsAsJson(hourlySeries);
 
 		// 공포 탐욕 지수
-		String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
+		// String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
 
 		// 차트 이미지
 		try {
@@ -115,8 +115,8 @@ public class ExecuteUseCase {
 		String message = "Current investment status: " + balance + "\n"
 			+ "Orderbook: " + orderbook + "\n"
 			+ "Daily OHLCV with indicators (30 days): " + dailyCandleWithIndicator + "\n"
-			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator + "\n"
-			+ "Fear and Greed Index: " + fearGreedIndex;
+			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator;
+			// + "Fear and Greed Index: " + fearGreedIndex;
 
 		// 회고 메시지 등록
 		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(7);
