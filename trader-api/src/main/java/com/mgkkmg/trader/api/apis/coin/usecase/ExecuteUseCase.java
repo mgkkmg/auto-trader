@@ -100,6 +100,7 @@ public class ExecuteUseCase {
 
 		// 공포 탐욕 지수
 		// String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
+		String fearGreedIndex = fearGreedIndexService.getUBCIFearAndGreedIndex();
 
 		// 차트 이미지
 		try {
@@ -115,8 +116,8 @@ public class ExecuteUseCase {
 		String message = "Current investment status: " + balance + "\n"
 			+ "Orderbook: " + orderbook + "\n"
 			+ "Daily OHLCV with indicators (30 days): " + dailyCandleWithIndicator + "\n"
-			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator;
-			// + "Fear and Greed Index: " + fearGreedIndex;
+			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator + "\n"
+			+ "Fear and Greed Index: " + fearGreedIndex;
 
 		// 회고 메시지 등록
 		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(7);
@@ -128,7 +129,6 @@ public class ExecuteUseCase {
 				.toList()
 		);
 
-		log.info("Check Performance: {}", performance);
 		log.info("tradeInfo: {}", tradeInfo);
 
 		OpenAiChatOptions reflectionChatOptions = openAiService.getChatOptions();
@@ -146,8 +146,6 @@ public class ExecuteUseCase {
 		String analyticMessage = analyticPrompt
 			.replace("{reflection}", callReflectionContent)
 			.replace("{message}", message);
-
-		log.info("analyticMessage: {}", analyticMessage);
 
 		String callAnalyticContent = openAiService.callAi(analyticMessage, chartPath + "/" + fileName,
 			analyticChatOptions);
@@ -168,6 +166,7 @@ public class ExecuteUseCase {
 			if (buyOrderResponse == null) {
 				orderStatus = OrderStatus.FAILURE;
 			}
+
 			log.info("Buy order executed: {}", buyOrderResponse);
 		} else if (Decision.SELL.getKey().equals(resultDto.decision())) {
 			// 매도
@@ -179,6 +178,7 @@ public class ExecuteUseCase {
 			if (sellOrderResponse == null) {
 				orderStatus = OrderStatus.FAILURE;
 			}
+
 			log.info("Sell order executed: {}", sellOrderResponse);
 		} else {
 			log.info("No action taken based on AI decision");

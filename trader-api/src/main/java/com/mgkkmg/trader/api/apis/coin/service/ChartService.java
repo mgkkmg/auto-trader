@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ChartService {
 
+	private final WebScreenshot webScreenshot;
+
 	@Value("${chart-image.path}")
 	private String chartPath;
 
@@ -27,8 +29,7 @@ public class ChartService {
 	private String fileName;
 
 	public void captureAndSaveScreenshot(String url, String waitForElementSelector) throws IOException {
-		WebScreenshot webScreenshot = new WebScreenshot();
-		File screenshotFile = webScreenshot.captureScreenshot(url, waitForElementSelector);
+		File screenshotFile = webScreenshot.captureScreenshotOfBitcoinChart(url, waitForElementSelector);
 
 		// Convert File to BufferedImage
 		BufferedImage image = ImageIO.read(screenshotFile);
