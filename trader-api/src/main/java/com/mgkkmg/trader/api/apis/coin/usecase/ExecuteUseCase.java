@@ -99,8 +99,8 @@ public class ExecuteUseCase {
 		String hourlyCandleWithIndicator = IndicatorCalculator.getIndicatorsAsJson(hourlySeries);
 
 		// 공포 탐욕 지수
-		// String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
-		String fearGreedIndex = fearGreedIndexService.getUBCIFearAndGreedIndex();
+		String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
+		// String fearGreedIndex = fearGreedIndexService.getUBCIFearAndGreedIndex();
 
 		// 차트 이미지
 		try {
