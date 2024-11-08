@@ -22,6 +22,7 @@ import com.mgkkmg.trader.api.apis.coin.service.CandleService;
 import com.mgkkmg.trader.api.apis.coin.service.ChartService;
 import com.mgkkmg.trader.api.apis.coin.service.FearGreedIndexService;
 import com.mgkkmg.trader.api.apis.coin.service.MarketPriceService;
+import com.mgkkmg.trader.api.apis.coin.service.NewsService;
 import com.mgkkmg.trader.api.apis.coin.service.OrderExecuteService;
 import com.mgkkmg.trader.api.apis.coin.service.OrderbookService;
 import com.mgkkmg.trader.api.apis.coin.service.TaService;
@@ -49,6 +50,7 @@ public class ExecuteUseCase {
 	private final TaService taService;
 	private final FearGreedIndexService fearGreedIndexService;
 	private final ChartService chartService;
+	private final NewsService newsService;
 	private final OpenAiService openAiService;
 	private final OrderExecuteService orderExecuteService;
 	private final MarketPriceService marketPriceService;
@@ -112,15 +114,18 @@ public class ExecuteUseCase {
 			throw new BusinessException(e.getMessage(), ErrorCode.CAPTURE_SCREENSHOT_ERROR);
 		}
 
+		String newsHeadLine = JsonUtils.toJson(newsService.getNewsHeadLines());
+
 		// AI 호출 및 결과 받기
 		String message = "Current investment status: " + balance + "\n"
 			+ "Orderbook: " + orderbook + "\n"
 			+ "Daily OHLCV with indicators (30 days): " + dailyCandleWithIndicator + "\n"
 			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator + "\n"
-			+ "Fear and Greed Index: " + fearGreedIndex;
+			+ "Fear and Greed Index: " + fearGreedIndex
+			+ "Recent news headlines: " + newsHeadLine;
 
 		// 회고 메시지 등록
-		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(7);
+		List<TradeInfoDto> tradeInfos = tradeDomainService.getTradeInfoFromLastDays(3);
 
 		String performance = String.format("%.2f", PerformanceCalculator.getPerformance2(tradeInfos));
 		String tradeInfo = JsonUtils.toJson(

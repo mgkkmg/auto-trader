@@ -82,7 +82,7 @@ public class OrderExecuteService {
 			queryElements.add(entity.getKey() + "=" + entity.getValue());
 		}
 
-		return upbitApiClient.placeOrder(
+		return upbitApiClient.postPlaceOrder(
 			MediaType.APPLICATION_JSON_VALUE,
 			jwtTokenProvider.createToken(queryElements, upbitConfig.getSecretKey(), upbitConfig.getAccessKey()),
 			params

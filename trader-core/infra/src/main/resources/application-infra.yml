@@ -8,6 +8,9 @@ upbit:
   access-key: ENC(lHKXPFsFLNHh4QtHXtYeRfnaG6EQyW5U0KJc/iiULcyespLw8rZ2JZUVV7TtWwec7TYOGDHuWXw=)
   secret-key: ENC(sWK04sCyy25gp91COo8EKpxwbVOlIGxl5b76M7+FTcklJUQgf2uXn+JDO38APHmlj8eYU4vhFSU=)
 
+serp-api:
+  private-key: ENC(cuH5whPIdLFGYXgtJE01IQ77/ajFRBbTTokcNlBIf6PnPrRgYwcVqQZJWf4flY5PnDxhucUvx+LVwxcTO9LpX1rG3VByAlwU7MGvSA1h3+Y=)
+
 ---
 spring:
   config:

@@ -47,7 +47,7 @@ public interface UpbitApiClient {
 	);
 
 	@PostExchange("https://api.upbit.com/v1/orders")
-	OrderResponse placeOrder(
+	OrderResponse postPlaceOrder(
 		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
 		@RequestHeader(HttpHeaders.AUTHORIZATION) String authenticationToken,
 		@RequestBody Map<String, String> params

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.RestClient;
 
 import com.mgkkmg.trader.core.infra.client.AlternativeClient;
+import com.mgkkmg.trader.core.infra.client.SerpApiClient;
 import com.mgkkmg.trader.core.infra.client.UpbitApiClient;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,11 @@ public class HttpInterfaceConfig {
 	@Bean
 	public AlternativeClient alternativeClient() {
 		return httpInterfaceFactory.create(AlternativeClient.class, createRestClient());
+	}
+
+	@Bean
+	public SerpApiClient serpApiClient() {
+		return httpInterfaceFactory.create(SerpApiClient.class, createRestClient());
 	}
 
 	private RestClient createRestClient() {
