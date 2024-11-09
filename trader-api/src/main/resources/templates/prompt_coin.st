@@ -12,12 +12,7 @@ Recent trading reflection:
 Provided data:
 {message}
 
-It is especially important to evaluate the current situation and make trading decisions by referring to the trading method of Korean investor 'Wonyoti'. Wonyoti's trading method is as follows:
-1. Risk Management Through High Win Rate and Low Leverage: He used low leverage to maintain a high win rate and maximize the compounding effect. He aimed for a steady return of 1-2% every day.
-2. Thorough Fund Management: He invested only 20–30% of his total investment capital and gradually reduced leverage as his assets grew. He minimized risk through split purchases and prudent trading, avoiding unplanned averaging down.
-3. Secret to Utilizing Charts: He predicted market trends and rebounds by using candlestick patterns and moving averages.
-
-Based on this trading method, analyze the current market situation and make a judgment by synthesizing it with the provided data and recent trading reflection.
+Based on your analysis, make a decision and provide your reasoning.
 
 Respond with:
 1. A decision (buy, sell, or hold)

@@ -194,8 +194,8 @@ public class IndicatorCalculator {
 		MACDIndicator macd = calculateMACD(series, 12, 26);
 		EMAIndicator macdSignal = calculateMACDSignal(macd, 9);
 		EMAIndicator ema21 = calculateEMA(series, 21);
-		// ATRIndicator atr14 = calculateATR(series, 14);
-		// OnBalanceVolumeIndicator obv = calculateOBV(series);
+		ATRIndicator atr14 = calculateATR(series, 14);
+		OnBalanceVolumeIndicator obv = calculateOBV(series);
 		// ParabolicSarIndicator psar = calculateParabolicSAR(series);
 
 		// Bollinger Bands 계산
@@ -203,7 +203,7 @@ public class IndicatorCalculator {
 		// BollingerBandsUpperIndicator bollingerUpper = calculateBollingerUpper(series, 20, bollingerMultiplier);
 		// BollingerBandsLowerIndicator bollingerLower = calculateBollingerLower(series, 20, bollingerMultiplier);
 
-		// StochasticOscillatorDIndicator stochasticD = calculateStochasticD(series, 14);
+		StochasticOscillatorDIndicator stochasticD = calculateStochasticD(series, 14);
 
 		List<IndicatorDto> dataList = new ArrayList<>();
 
@@ -221,12 +221,12 @@ public class IndicatorCalculator {
 			Num macdValue = macd.getValue(i);
 			Num signalValue = macdSignal.getValue(i);
 			Num emaValue = ema21.getValue(i);
-			// Num atrValue = atr14.getValue(i);
-			// Num obvValue = obv.getValue(i);
+			Num atrValue = atr14.getValue(i);
+			Num obvValue = obv.getValue(i);
 			// Num psarValue = psar.getValue(i);
 			// Num bollingerUpperValue = bollingerUpper.getValue(i);
 			// Num bollingerLowerValue = bollingerLower.getValue(i);
-			// Num stochasticDValue = stochasticD.getValue(i);
+			Num stochasticDValue = stochasticD.getValue(i);
 
 			IndicatorDto data = IndicatorDto.builder()
 				.date(formattedDate)
@@ -241,12 +241,12 @@ public class IndicatorCalculator {
 				.macd(macdValue.isNaN() ? 0.0 : macdValue.doubleValue())
 				.signal(signalValue.isNaN() ? 0.0 : signalValue.doubleValue())
 				.ema21(emaValue.isNaN() ? 0.0 : emaValue.doubleValue())
-				// .atr14(atrValue.isNaN() ? 0.0 : atrValue.doubleValue())
-				// .obv(obvValue.isNaN() ? 0.0 : obvValue.doubleValue())
+				.atr14(atrValue.isNaN() ? 0.0 : atrValue.doubleValue())
+				.obv(obvValue.isNaN() ? 0.0 : obvValue.doubleValue())
 				// .psar(psarValue.isNaN() ? 0.0 : psarValue.doubleValue())
 				// .bollingerUpper(bollingerUpperValue.isNaN() ? 0.0 : bollingerUpperValue.doubleValue())
 				// .bollingerLower(bollingerLowerValue.isNaN() ? 0.0 : bollingerLowerValue.doubleValue())
-				// .stochasticD(stochasticDValue.isNaN() ? 0.0 : stochasticDValue.doubleValue())
+				.stochasticD(stochasticDValue.isNaN() ? 0.0 : stochasticDValue.doubleValue())
 				.build();
 
 			dataList.add(data);

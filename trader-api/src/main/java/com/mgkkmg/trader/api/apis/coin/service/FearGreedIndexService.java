@@ -21,7 +21,7 @@ public class FearGreedIndexService {
 
 	public FearGreedIndexResponse getFearAndGreedIndex() throws BusinessException {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-		params.add("limit", "14");
+		params.add("limit", "2");
 
 		return alternativeClient.getFearAndGreedIndex(MediaType.APPLICATION_JSON_VALUE, params);
 	}

@@ -37,7 +37,7 @@ public class NewsService {
 	public List<NewsResultsDto> getSerpApiNewsHeadLines() throws BusinessException {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 		params.add("engine", "google_news");
-		params.add("q", "btc");
+		params.add("q", "bitcoin OR btc");
 		params.add("gl", "us");
 		params.add("hl", "en");
 		params.add("api_key", apiKey);
@@ -55,7 +55,7 @@ public class NewsService {
 
 	public List<RssItemDto> getRssNewsHeadLines() {
 		try {
-			URL feedUrl = URI.create("https://news.google.com/rss/search?q=btc+when:1d&hl=en&gl=US&ceid=US:en").toURL();
+			URL feedUrl = URI.create("https://news.google.com/rss/search?q=bitcoin+OR+btc+when:1d&hl=en&gl=US&ceid=US:en").toURL();
 
 			// URL로부터 InputStream 가져오기
 			HttpURLConnection httpURLConnection = (HttpURLConnection)feedUrl.openConnection();

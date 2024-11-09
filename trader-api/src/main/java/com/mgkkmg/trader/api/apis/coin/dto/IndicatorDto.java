@@ -15,12 +15,12 @@ public record IndicatorDto(
 	double rsi14,
 	double macd,
 	double signal,
-	double ema21
-	// double atr14,
-	// double obv,
+	double ema21,
+	double atr14,
+	double obv,
 	// double psar,
 	// double bollingerUpper,
 	// double bollingerLower,
-	// double stochasticD
+	double stochasticD
 ) {
 }
