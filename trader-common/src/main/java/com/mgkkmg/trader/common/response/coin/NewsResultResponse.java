@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record NewsResultResponse(
-	@JsonProperty("news_results")
-	List<NewsItemDto> newsResults
+	@JsonProperty("search_metadata") SearchMetadataDto searchMetadata,
+	@JsonProperty("news_results") List<NewsResultsDto> newsResults
 ) {
 }

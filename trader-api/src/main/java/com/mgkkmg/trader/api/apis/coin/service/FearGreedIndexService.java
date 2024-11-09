@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.mgkkmg.trader.common.exception.BusinessException;
 import com.mgkkmg.trader.common.response.coin.FearGreedIndexResponse;
 import com.mgkkmg.trader.core.infra.client.AlternativeClient;
 import com.mgkkmg.trader.core.infra.selenium.WebCrawler;
@@ -18,7 +19,7 @@ public class FearGreedIndexService {
 	private final AlternativeClient alternativeClient;
 	private final WebCrawler webCrawler;
 
-	public FearGreedIndexResponse getFearAndGreedIndex() {
+	public FearGreedIndexResponse getFearAndGreedIndex() throws BusinessException {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 		params.add("limit", "14");
 

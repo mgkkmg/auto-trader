@@ -36,8 +36,10 @@ out/
 ### VS Code ###
 .vscode/
 
+### App ###
 logs/
 .env
 db/
 images/
 conf/
+trader-api/src/main/resources/templates/backup/

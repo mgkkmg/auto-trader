@@ -8,10 +8,10 @@ import org.springframework.web.service.annotation.GetExchange;
 
 import com.mgkkmg.trader.common.response.coin.NewsResultResponse;
 
-public interface SerpApiClient {
+public interface NewsApiClient {
 
 	@GetExchange("https://serpapi.com/search.json")
-	NewsResultResponse getNewsResult(
+	NewsResultResponse getSerpApiNewsResult(
 		@RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType,
 		@RequestParam(value = "params") MultiValueMap<String, Object> params
 	);

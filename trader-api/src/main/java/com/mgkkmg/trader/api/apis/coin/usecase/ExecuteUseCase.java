@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.util.CollectionUtils;
 import org.ta4j.core.BarSeries;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -101,8 +102,12 @@ public class ExecuteUseCase {
 		String hourlyCandleWithIndicator = IndicatorCalculator.getIndicatorsAsJson(hourlySeries);
 
 		// 공포 탐욕 지수
-		String fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
-		// String fearGreedIndex = fearGreedIndexService.getUBCIFearAndGreedIndex();
+		String fearGreedIndex;
+		try {
+			fearGreedIndex = JsonUtils.toJson(fearGreedIndexService.getFearAndGreedIndex());
+		} catch (BusinessException e) {
+			fearGreedIndex = fearGreedIndexService.getUBCIFearAndGreedIndex();
+		}
 
 		// 차트 이미지
 		try {
@@ -114,14 +119,25 @@ public class ExecuteUseCase {
 			throw new BusinessException(e.getMessage(), ErrorCode.CAPTURE_SCREENSHOT_ERROR);
 		}
 
-		String newsHeadLine = JsonUtils.toJson(newsService.getNewsHeadLines());
+		// 뉴스 제목
+		String newsHeadLine;
+		try {
+			var serpApiNewsHeadLines = newsService.getSerpApiNewsHeadLines();
+			if (!CollectionUtils.isEmpty(serpApiNewsHeadLines)) {
+				newsHeadLine = JsonUtils.toJson(serpApiNewsHeadLines);
+			} else {
+				newsHeadLine = JsonUtils.toJson(newsService.getRssNewsHeadLines());
+			}
+		} catch (BusinessException e) {
+			newsHeadLine = JsonUtils.toJson(newsService.getRssNewsHeadLines());
+		}
 
 		// AI 호출 및 결과 받기
 		String message = "Current investment status: " + balance + "\n"
 			+ "Orderbook: " + orderbook + "\n"
 			+ "Daily OHLCV with indicators (30 days): " + dailyCandleWithIndicator + "\n"
 			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator + "\n"
-			+ "Fear and Greed Index: " + fearGreedIndex
+			+ "Fear and Greed Index: " + fearGreedIndex + "\n"
 			+ "Recent news headlines: " + newsHeadLine;
 
 		// 회고 메시지 등록

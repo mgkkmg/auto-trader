@@ -14,6 +14,7 @@ public enum ErrorCode implements ResponseBaseCode {
 	INVALID_TYPE_VALUE("C-005", "Invalid Type Value"),
 	HANDLE_ACCESS_DENIED("C-006", "Access is Denied"),
 	CREATE_JWT_TOKEN_ERROR("C-007", "Jwt Token error"),
+	REST_API_ERROR("C-008", "Rest Client Error"),
 
 	// Util
 	JSON_PROCESS_ERROR("U-001", "Json processing exception"),
@@ -25,6 +26,7 @@ public enum ErrorCode implements ResponseBaseCode {
 	// Business
 	DUPLICATE("B-001", "Duplicate Value"),
 	NOT_FOUND("B-002", "Entity Not Found"),
+	PARSE_RSS_FAIL("B-003", "Failed to parse RSS content"),
 
 	// Member,
 	EMAIL_DUPLICATE("M-001", "Duplicate Email Address"),

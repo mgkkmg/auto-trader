@@ -12,12 +12,10 @@ public record FearGreedIndexResponse(
 ) {
 	public record FearGreedData(
 		String value,
-		@JsonProperty("value_classification")
-		String valueClassification,
+		@JsonProperty("value_classification") String valueClassification,
 		String timestamp,
-		@JsonProperty("time_until_update")
 		@JsonInclude(JsonInclude.Include.NON_NULL)
-		String timeUntilUpdate
+		@JsonProperty("time_until_update") String timeUntilUpdate
 	) {}
 
 	public record Metadata(
