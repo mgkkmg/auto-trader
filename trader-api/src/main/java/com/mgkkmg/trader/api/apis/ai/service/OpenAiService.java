@@ -19,20 +19,20 @@ public class OpenAiService {
 
 	private final OpenAiChatModel openAiChatModel;
 
-	public OpenAiChatOptions getChatOptions() {
+	public OpenAiChatOptions getChatOptions(ChatModel chatModel) {
 
 		// OpenAI Chat 옵션 설정
 		return OpenAiChatOptions.builder()
-			.withModel(ChatModel.GPT_4_O)
+			.withModel(chatModel)
 			.withTemperature(0.7)
 			.build();
 	}
 
-	public OpenAiChatOptions getChatOptions(String schema) {
+	public OpenAiChatOptions getChatOptions(ChatModel chatModel, String schema) {
 
 		// OpenAI Chat 옵션 설정
 		return OpenAiChatOptions.builder()
-			.withModel(ChatModel.GPT_4_O)
+			.withModel(chatModel)
 			.withTemperature(0.7)
 			.withResponseFormat(new ResponseFormat(ResponseFormat.Type.JSON_SCHEMA, schema))
 			.build();

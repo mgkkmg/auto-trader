@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.util.CollectionUtils;
@@ -152,7 +153,7 @@ public class ExecuteUseCase {
 
 		log.info("tradeInfo: {}", tradeInfo);
 
-		OpenAiChatOptions reflectionChatOptions = openAiService.getChatOptions();
+		OpenAiChatOptions reflectionChatOptions = openAiService.getChatOptions(OpenAiApi.ChatModel.GPT_4_O_MINI);
 		String reflectionPrompt = resourceToString(promptCoinTradeReflectionResource);
 		String reflectionMessage = reflectionPrompt
 			.replace("{trade_data}", tradeInfo)
@@ -162,7 +163,7 @@ public class ExecuteUseCase {
 		String callReflectionContent = openAiService.callAi(reflectionMessage, reflectionChatOptions);
 
 		// 분석 메시지 등록
-		OpenAiChatOptions analyticChatOptions = openAiService.getChatOptions(resourceToString(coinSchemaResource));
+		OpenAiChatOptions analyticChatOptions = openAiService.getChatOptions(OpenAiApi.ChatModel.GPT_4_O, resourceToString(coinSchemaResource));
 		String analyticPrompt = resourceToString(promptCoinResource);
 		String analyticMessage = analyticPrompt
 			.replace("{reflection}", callReflectionContent)
