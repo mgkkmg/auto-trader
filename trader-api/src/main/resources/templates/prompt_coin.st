@@ -3,7 +3,6 @@ You are an expert in Bitcoin investing. This analysis is performed every 4 hours
 - Recent news headlines and their potential impact on Bitcoin price
 - The Fear and Greed Index and its implications
 - Overall market sentiment
-- The patterns and trends visible in the chart image
 - Recent trading performance and reflection
 
 Recent trading reflection:

@@ -27,7 +27,7 @@ public class CandleService {
 		final int intervalMinute = 60;
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 		params.add("market", market);
-		params.add("count", 24);
+		params.add("count", 48);
 
 		List<CandleMinuteResponse> candleMinuteResponses = upbitApiClient.getCandlesMinutes(MediaType.APPLICATION_JSON_VALUE, intervalMinute, params);
 
@@ -39,7 +39,7 @@ public class CandleService {
 	public List<CandleDayDto> getCandlesDays(String market) {
 		MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 		params.add("market", market);
-		params.add("count", 30);
+		params.add("count", 60);
 
 		List<CandleDayResponse> candleDayResponses = upbitApiClient.getCandlesDays(MediaType.APPLICATION_JSON_VALUE, params);
 

@@ -110,14 +110,14 @@ public class ExecuteUseCase {
 		}
 
 		// 차트 이미지
-		try {
-			String url = "https://upbit.com/full_chart?code=CRIX.UPBIT.KRW-BTC";
-			String waitForElementSelector = "#fullChartiq";
-
-			chartService.captureAndSaveScreenshot(url, waitForElementSelector);
-		} catch (IOException e) {
-			throw new BusinessException(e.getMessage(), ErrorCode.CAPTURE_SCREENSHOT_ERROR);
-		}
+		// try {
+		// 	String url = "https://upbit.com/full_chart?code=CRIX.UPBIT.KRW-BTC";
+		// 	String waitForElementSelector = "#fullChartiq";
+		//
+		// 	chartService.captureAndSaveScreenshot(url, waitForElementSelector);
+		// } catch (IOException e) {
+		// 	throw new BusinessException(e.getMessage(), ErrorCode.CAPTURE_SCREENSHOT_ERROR);
+		// }
 
 		// 뉴스 제목
 		String newsHeadLine;
@@ -135,8 +135,8 @@ public class ExecuteUseCase {
 		// AI 호출 및 결과 받기
 		String message = "Current investment status: " + balance + "\n"
 			+ "Orderbook: " + orderbook + "\n"
-			+ "Daily OHLCV with indicators (30 days): " + dailyCandleWithIndicator + "\n"
-			+ "Hourly OHLCV with indicators (24 hours): " + hourlyCandleWithIndicator + "\n"
+			+ "Daily OHLCV with indicators (60 days): " + dailyCandleWithIndicator + "\n"
+			+ "Hourly OHLCV with indicators (48 hours): " + hourlyCandleWithIndicator + "\n"
 			+ "Fear and Greed Index: " + fearGreedIndex + "\n"
 			+ "Recent news headlines: " + newsHeadLine;
 
@@ -168,8 +168,8 @@ public class ExecuteUseCase {
 			.replace("{reflection}", callReflectionContent)
 			.replace("{message}", message);
 
-		String callAnalyticContent = openAiService.callAi(analyticMessage, chartPath + "/" + fileName,
-			analyticChatOptions);
+		// String callAnalyticContent = openAiService.callAi(analyticMessage, chartPath + "/" + fileName, analyticChatOptions);
+		String callAnalyticContent = openAiService.callAi(analyticMessage, analyticChatOptions);
 		AiCoinResultDto resultDto = JsonUtils.fromJson(callAnalyticContent, AiCoinResultDto.class);
 
 		log.info("resultDto: {}", resultDto);
@@ -205,7 +205,7 @@ public class ExecuteUseCase {
 			log.info("No action taken based on AI decision");
 		}
 
-		// 매매 후 매매 정보 DB 등록
+		// 매매 정보 DB 등록
 		List<AccountDto> newAccounts = accountInfoService.getAccounts();
 
 		String krwBalance = newAccounts.stream()
