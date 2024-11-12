@@ -69,8 +69,8 @@ public record TradeInfoDto(
 			data.btcBalance,
 			data.btcAvgBuyPrice,
 			data.btcKrwPrice,
-			"",
-			null,
+			data.reflection,
+			data.orderStatus,
 			data.createdAt
 		);
 	}

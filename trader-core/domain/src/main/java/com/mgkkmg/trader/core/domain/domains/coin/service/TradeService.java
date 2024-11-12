@@ -27,7 +27,7 @@ public class TradeService {
 	public List<TradeInfoDto> getTradeInfoFromLastDays(final int day) {
 		LocalDateTime lastDaysAgo = LocalDateTime.now().minusDays(day);
 
-		return tradeRepository.findSuccessfulTradesFromLastDays(lastDaysAgo, OrderStatus.SUCCESS).stream()
+		return tradeRepository.findTradesFromLastDays(lastDaysAgo, OrderStatus.SKIP).stream()
 			.map(TradeInfoDto::fromEntity)
 			.toList();
 	}
