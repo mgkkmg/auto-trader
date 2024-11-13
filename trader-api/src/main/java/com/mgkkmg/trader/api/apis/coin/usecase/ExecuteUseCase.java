@@ -87,10 +87,10 @@ public class ExecuteUseCase {
 		// 오더북(호가 데이터) 조회
 		String orderbook = JsonUtils.toJson(orderbookService.getOrderbook(MARKET));
 
-		// 30일 일봉 데이터 조회
+		// 60일 일봉 데이터 조회
 		String dailyCandle = JsonUtils.toJson(candleService.getCandlesDays(MARKET));
 
-		// 24시간 시간봉 데이터 조회
+		// 48시간 시간봉 데이터 조회
 		String hourlyCandle = JsonUtils.toJson(candleService.getCandlesMinutes(MARKET));
 
 		// 보조 지표 넣기

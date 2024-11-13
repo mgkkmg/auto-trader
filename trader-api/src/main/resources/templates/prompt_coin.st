@@ -12,6 +12,9 @@ Provided data:
 {message}
 
 Based on your analysis, make a decision and provide your reasoning.
+And when deciding on a trade, consider the minimum trade amount.
+If your investment opinion is Sell and your current investment status 'Currency:'BTC' balance is less than '0.00005', please place a hold as you will not be able to sell on the exchange.
+Also, if your investment opinion is Buy and your current investment status 'Currency:'KRW' balance is less than '5000', please place a hold as you will not be able to buy on the exchange.
 
 Respond with:
 1. A decision (buy, sell, or hold)
@@ -22,7 +25,3 @@ If the decision is 'hold', set the percentage to 0.
 
 Ensure that the percentage is an integer between 1 and 100 for buy/sell decisions, and exactly 0 for hold decisions.
 Your percentage should reflect the strength of your conviction in the decision based on the analyzed data.
-
-Please consider the minimum trade amount when deciding to trade. If your balance is below the minimum tradeable amount, please place a hold. See below for the minimum trade amount:
-- KRW Balance: 5,000 KRW
-- BTC Balance: 0.00005 BTC
