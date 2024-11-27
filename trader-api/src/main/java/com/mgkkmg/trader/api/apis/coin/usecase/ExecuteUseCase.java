@@ -8,7 +8,6 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.util.CollectionUtils;
 import org.ta4j.core.BarSeries;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -121,17 +120,17 @@ public class ExecuteUseCase {
 		// }
 
 		// 뉴스 제목
-		String newsHeadLine;
-		try {
-			var serpApiNewsHeadLines = newsService.getSerpApiNewsHeadLines();
-			if (!CollectionUtils.isEmpty(serpApiNewsHeadLines)) {
-				newsHeadLine = JsonUtils.toJson(serpApiNewsHeadLines);
-			} else {
-				newsHeadLine = JsonUtils.toJson(newsService.getRssNewsHeadLines());
-			}
-		} catch (BusinessException e) {
-			newsHeadLine = JsonUtils.toJson(newsService.getRssNewsHeadLines());
-		}
+		String newsHeadLine = JsonUtils.toJson(newsService.getRssNewsHeadLines());
+		// try {
+		// 	var serpApiNewsHeadLines = newsService.getSerpApiNewsHeadLines();
+		// 	if (!CollectionUtils.isEmpty(serpApiNewsHeadLines)) {
+		// 		newsHeadLine = JsonUtils.toJson(serpApiNewsHeadLines);
+		// 	} else {
+		// 		newsHeadLine = JsonUtils.toJson(newsService.getRssNewsHeadLines());
+		// 	}
+		// } catch (BusinessException e) {
+		// 	newsHeadLine = JsonUtils.toJson(newsService.getRssNewsHeadLines());
+		// }
 
 		// AI 호출 및 결과 받기
 		String message = "Current investment status: " + balance + "\n"
