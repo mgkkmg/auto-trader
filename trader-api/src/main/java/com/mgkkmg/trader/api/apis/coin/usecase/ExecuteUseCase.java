@@ -150,8 +150,6 @@ public class ExecuteUseCase {
 				.toList()
 		);
 
-		log.info("tradeInfo: {}", tradeInfo);
-
 		OpenAiChatOptions reflectionChatOptions = openAiService.getChatOptions(OpenAiApi.ChatModel.GPT_4_O_MINI);
 		String reflectionPrompt = resourceToString(promptCoinTradeReflectionResource);
 		String reflectionMessage = reflectionPrompt
@@ -168,11 +166,11 @@ public class ExecuteUseCase {
 			.replace("{reflection}", callReflectionContent)
 			.replace("{message}", message);
 
+		log.info("analyticMessage: {}", analyticMessage);
+
 		// String callAnalyticContent = openAiService.callAi(analyticMessage, chartPath + "/" + fileName, analyticChatOptions);
 		String callAnalyticContent = openAiService.callAi(analyticMessage, analyticChatOptions);
 		AiCoinResultDto resultDto = JsonUtils.fromJson(callAnalyticContent, AiCoinResultDto.class);
-
-		log.info("resultDto: {}", resultDto);
 
 		// 주문 성공 여부
 		OrderStatus orderStatus = OrderStatus.SUCCESS;
