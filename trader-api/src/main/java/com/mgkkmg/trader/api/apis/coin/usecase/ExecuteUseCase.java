@@ -157,6 +157,8 @@ public class ExecuteUseCase {
 			.replace("{current_market_data}", message)
 			.replace("{performance}", performance);
 
+		log.info("reflectionMessage: {}", reflectionMessage);
+
 		String callReflectionContent = openAiService.callAi(reflectionMessage, reflectionChatOptions);
 
 		// 분석 메시지 등록

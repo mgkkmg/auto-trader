@@ -12,6 +12,5 @@ Please analyze this data and provide:
 1. A brief reflection on the recent trading decisions
 2. Insights on what worked well and what didn't
 3. Suggestions for improvement in future trading decisions
-4. Any patterns or trends you notice in the market data
 
-Limit your response to 250 words or less.
+Limit your response to 200 words or less.
