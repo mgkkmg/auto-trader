@@ -6,7 +6,7 @@ Recent trading data:
 Current market data:
 {current_market_data}
 
-Overall performance in the last 3 days: {performance}%
+Overall performance: {performance}%
 
 Please analyze this data and provide:
 1. A brief reflection on the recent trading decisions

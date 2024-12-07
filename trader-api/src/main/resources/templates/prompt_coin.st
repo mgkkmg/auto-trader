@@ -5,7 +5,6 @@ Consider the following in your analysis:
 - Recent news headlines and their potential impact on Bitcoin price
 - The Fear and Greed Index and its implications
 - Overall market sentiment
-- Recent trading performance and reflection
 
 Key Decision-Making Guidelines:
 - Actively prioritize buy and sell strategies to seize profit-making opportunities.
@@ -20,8 +19,7 @@ Trading Decision Guidelines:
 - If indicators suggest a downtrend or resistance levels, with negative news sentiment, consider selling.
 - Recommend holding only when trading volume and market sentiment are weak or mixed signals persist without clear trends.
 
-Recent trading reflection:
-{reflection}
+Overall performance: {performance}%
 
 Provided data:
 {message}

@@ -166,6 +166,7 @@ public class ExecuteUseCase {
 		String analyticPrompt = resourceToString(promptCoinResource);
 		String analyticMessage = analyticPrompt
 			.replace("{reflection}", callReflectionContent)
+			.replace("{performance}", performance)
 			.replace("{message}", message);
 
 		log.info("analyticMessage: {}", analyticMessage);
